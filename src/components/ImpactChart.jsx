@@ -17,15 +17,15 @@ const ImpactChart = () => {
                 <div className="flex flex-col items-center gap-2">
                     <motion.div
                         initial={{ height: 0 }}
-                        whileInView={{ height: "100%" }} // Full chiều cao cha (h-48 ~ 192px)
+                        whileInView={{ height: 160 }}
                         transition={{ duration: 1.5, type: "spring" }}
-                        className="w-16 bg-periwinkle rounded-t-lg relative flex items-center justify-center"
+                        className="w-16 bg-periwinkle rounded-t-lg relative flex items-end justify-center"
                     >
                         <motion.span
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{ delay: 1 }}
-                            className="font-bold text-white text-lg"
+                            className="font-bold text-white text-lg text-shadow-lg mb-1"
                         >
                             +256%
                         </motion.span>
