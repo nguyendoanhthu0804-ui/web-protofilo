@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import ImpactChart from "./components/ImpactChart";
 import ArtGenerator from "./components/ArtGenerator";
 import CodeRain from "./components/CodeRain";
+import LilyFlower from "./components/LilyFlower";
 
 // Section component với scroll snap
 const Section = ({ children, className }) => (
@@ -61,7 +62,7 @@ const scaleUp = {
 
 function App() {
   return (
-    <div className="bg-creamy-white text-charcoal h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar font-sans selection:bg-pastel-pink">
+    <div className="bg-creamy-white text-charcoal h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar selection:bg-pastel-pink">
 
       {/* --- GIAI ĐOẠN 1: THE OBSERVER --- */}
       <Section className="bg-creamy-white">
@@ -75,7 +76,7 @@ function App() {
           {/* Left content */}
           <motion.div variants={slideFromLeft}>
             <motion.h2
-              className="text-5xl font-bold mb-4 font-handwriting text-pastel-pink drop-shadow-md"
+              className="text-5xl font-bold mb-4 text-pastel-pink drop-shadow-md"
               variants={itemVariants}
             >
               The Observer
@@ -295,6 +296,298 @@ function App() {
           {/* Right - Art Generator */}
           <motion.div className="flex justify-center" variants={slideFromRight}>
             <ArtGenerator />
+          </motion.div>
+        </motion.div>
+      </Section>
+
+      {/* --- GIAI ĐOẠN 5: THE GROWTH - INTERACTIVE STORYTELLING --- */}
+      <Section className="bg-gradient-to-b from-creamy-white to-pink-50">
+        <motion.div
+          className="max-w-6xl w-full"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {/* Header */}
+          <motion.div className="text-center mb-8" variants={itemVariants}>
+            <motion.h2
+              className="text-4xl md:text-5xl font-bold mb-4"
+              variants={scaleUp}
+            >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 via-teal-400 to-pink-500">
+                Hành trình Nở Hoa
+              </span>
+            </motion.h2>
+            <motion.p
+              className="text-lg text-gray-600 max-w-2xl mx-auto"
+              variants={itemVariants}
+            >
+              Mỗi trải nghiệm, mỗi kết nối, mỗi hành động thiện nguyện...
+              đều là những giọt nước nuôi dưỡng tâm hồn tôi phát triển.
+            </motion.p>
+          </motion.div>
+
+          {/* Interactive Lily Flower */}
+          <motion.div variants={scaleUp}>
+            <LilyFlower />
+          </motion.div>
+
+          {/* Caption */}
+          <motion.p
+            className="text-center text-sm text-gray-500 italic mt-4"
+            variants={itemVariants}
+          >
+            "Từ một nụ hoa e ấp, với tình yêu thương và sự kết nối,
+            tôi đã học cách nở rộ theo cách của riêng mình."
+          </motion.p>
+        </motion.div>
+      </Section>
+
+      {/* --- GIAI ĐOẠN 6: WHY VINUNI? --- */}
+      <Section className="bg-gradient-to-br from-[#1a365d] via-[#2c5282] to-[#2b6cb0] text-white relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white rounded-full"></div>
+          <div className="absolute bottom-20 right-20 w-48 h-48 border-2 border-white rounded-full"></div>
+          <div className="absolute top-1/2 left-1/4 w-24 h-24 border-2 border-white rotate-45"></div>
+        </div>
+
+        <motion.div
+          className="max-w-5xl w-full z-10"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {/* Header */}
+          <motion.div className="text-center mb-12" variants={itemVariants}>
+            <motion.span
+              className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-mono mb-4"
+              variants={scaleUp}
+            >
+              🎯 Điểm đến tiếp theo
+            </motion.span>
+            <motion.h2
+              className="text-4xl md:text-6xl font-bold mb-4"
+              variants={scaleUp}
+            >
+              Why <span className="text-amber-400">VinUni</span>?
+            </motion.h2>
+          </motion.div>
+
+          {/* Reasons Grid */}
+          <motion.div
+            className="grid md:grid-cols-3 gap-6 mb-12"
+            variants={containerVariants}
+          >
+            {/* Reason 1 */}
+            <motion.div
+              className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+              variants={slideFromLeft}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <div className="text-4xl mb-4">🔬</div>
+              <h3 className="text-xl font-bold mb-3 text-amber-300">Research-Driven</h3>
+              <p className="text-gray-200 text-sm leading-relaxed">
+                VinUni không chỉ dạy lý thuyết. Môi trường nghiên cứu tại đây cho phép tôi
+                áp dụng Data Science vào các vấn đề thực tế của Việt Nam ngay từ năm nhất.
+              </p>
+            </motion.div>
+
+            {/* Reason 2 */}
+            <motion.div
+              className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+              variants={scaleUp}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <div className="text-4xl mb-4">🌏</div>
+              <h3 className="text-xl font-bold mb-3 text-amber-300">Global + Local</h3>
+              <p className="text-gray-200 text-sm leading-relaxed">
+                Chương trình hợp tác với Cornell giúp tôi tiếp cận kiến thức quốc tế,
+                nhưng vẫn giữ gốc rễ để phục vụ cộng đồng Việt Nam.
+              </p>
+            </motion.div>
+
+            {/* Reason 3 */}
+            <motion.div
+              className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+              variants={slideFromRight}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <div className="text-4xl mb-4">💡</div>
+              <h3 className="text-xl font-bold mb-3 text-amber-300">Innovation Ecosystem</h3>
+              <p className="text-gray-200 text-sm leading-relaxed">
+                Hệ sinh thái Vingroup mở ra cơ hội thực tập, khởi nghiệp và biến ý tưởng
+                Data for Good thành sản phẩm thực sự tác động xã hội.
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* Quote Box */}
+          <motion.div
+            className="bg-gradient-to-r from-amber-400/20 to-orange-400/20 backdrop-blur-sm p-8 rounded-2xl border border-amber-400/30 text-center"
+            variants={scaleUp}
+          >
+            <p className="text-xl md:text-2xl font-medium italic mb-4">
+              "Tôi muốn trở thành người kết nối giữa <span className="text-amber-400">công nghệ</span> và
+              <span className="text-pink-300"> tình người</span>. VinUni là nơi giúp tôi hiện thực hóa sứ mệnh đó."
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-300">
+              <span className="w-8 h-[1px] bg-gray-400"></span>
+              <span>My Promise</span>
+              <span className="w-8 h-[1px] bg-gray-400"></span>
+            </div>
+          </motion.div>
+
+          {/* Future Goals */}
+          <motion.div
+            className="mt-12 flex flex-wrap justify-center gap-4"
+            variants={containerVariants}
+          >
+            {[
+              { icon: "📊", text: "Data Science for Social Good" },
+              { icon: "🎨", text: "Art + Tech Integration" },
+              { icon: "🤝", text: "Community Impact" },
+              { icon: "🚀", text: "Innovation Leader" }
+            ].map((goal, i) => (
+              <motion.div
+                key={i}
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm"
+                variants={scaleUp}
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.2)" }}
+              >
+                <span>{goal.icon}</span>
+                <span>{goal.text}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </Section>
+
+      {/* --- FOOTER: CONTACT & CTA --- */}
+      <Section className="bg-charcoal text-creamy-white min-h-[80vh]">
+        <motion.div
+          className="max-w-4xl w-full text-center"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          {/* Profile */}
+          <motion.div className="mb-8" variants={scaleUp}>
+            <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-pastel-pink via-periwinkle to-warm-yellow p-1">
+              <div className="w-full h-full rounded-full bg-charcoal flex items-center justify-center text-5xl">
+                👩‍💻
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-2">
+              Anh Thư
+            </h2>
+            <p className="text-xl text-gray-400 font-mono">
+              Aspiring Data Scientist | Social Innovator
+            </p>
+          </motion.div>
+
+          {/* Tagline */}
+          <motion.p
+            className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto"
+            variants={itemVariants}
+          >
+            Kết nối dữ liệu với trái tim. Biến những con số thành câu chuyện có ý nghĩa.
+            Sẵn sàng để tạo ra tác động tích cực cho cộng đồng.
+          </motion.p>
+
+          {/* Download CV Button */}
+          <motion.div className="mb-12" variants={scaleUp}>
+            <motion.a
+              href="/cv-nguyen-hoang-bao.pdf"
+              download
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-pastel-pink to-periwinkle text-charcoal font-bold text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download CV / Resume
+            </motion.a>
+          </motion.div>
+
+          {/* Contact Links */}
+          <motion.div
+            className="flex flex-wrap justify-center gap-6 mb-12"
+            variants={containerVariants}
+          >
+            {[
+              {
+                icon: "📧",
+                label: "Email",
+                value: "anhthu@example.com",
+                href: "mailto:anhthu@example.com",
+                color: "from-red-400 to-pink-400"
+              },
+              {
+                icon: "💼",
+                label: "LinkedIn",
+                value: "/in/anhthu",
+                href: "https://linkedin.com/in/anhthu",
+                color: "from-blue-400 to-blue-600"
+              },
+              {
+                icon: "🐙",
+                label: "GitHub",
+                value: "@anhthu",
+                href: "https://github.com/hoangbao",
+                color: "from-gray-400 to-gray-600"
+              },
+              {
+                icon: "📱",
+                label: "Phone",
+                value: "+84 xxx xxx xxx",
+                href: "tel:+84xxxxxxxxx",
+                color: "from-green-400 to-teal-400"
+              }
+            ].map((contact, i) => (
+              <motion.a
+                key={i}
+                href={contact.href}
+                target={contact.href.startsWith("http") ? "_blank" : "_self"}
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 min-w-[140px]"
+                variants={scaleUp}
+                whileHover={{ y: -5 }}
+              >
+                <span className={`text-3xl group-hover:scale-110 transition-transform`}>
+                  {contact.icon}
+                </span>
+                <span className="text-sm text-gray-400">{contact.label}</span>
+                <span className="text-xs text-gray-500 font-mono">{contact.value}</span>
+              </motion.a>
+            ))}
+          </motion.div>
+
+          {/* Divider */}
+          <motion.div
+            className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600 to-transparent mb-4"
+            variants={itemVariants}
+          />
+
+          {/* Scroll to top hint */}
+          <motion.div
+            className="mt-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            <motion.button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-gray-500 hover:text-gray-300 transition-colors"
+              whileHover={{ y: -3 }}
+            >
+              <span className="text-2xl">↑</span>
+              <p className="text-xs mt-1">Về đầu trang</p>
+            </motion.button>
           </motion.div>
         </motion.div>
       </Section>
