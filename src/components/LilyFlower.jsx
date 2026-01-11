@@ -229,10 +229,10 @@ const LilyFlower = () => {
             >
                 {/* SVG Hoa Ly */}
                 <svg
-                    width="200"
-                    height="280"
-                    viewBox="0 0 200 280"
-                    className="drop-shadow-2xl"
+                    width="280"
+                    height="350"
+                    viewBox="-40 -70 280 350"
+                    className="drop-shadow-2xl overflow-visible"
                 >
                     {/* Thân hoa */}
                     <motion.path
@@ -341,7 +341,7 @@ const LilyFlower = () => {
                             initial={{ opacity: 0, scale: 0 }}
                             animate={{
                                 opacity: bloomProgress > 30 ? 1 : 0,
-                                scale: bloomProgress > 30 ? 1 : 0
+                                scale: bloomProgress > 30 ? bloomProgress / 100 : 0
                             }}
                         >
                             <ellipse cx="100" cy="100" rx="8" ry="6" fill="#FFD700" />
@@ -439,7 +439,7 @@ const LilyFlower = () => {
             {/* Reset button */}
             {collectedItems.length > 0 && (
                 <motion.button
-                    className="absolute bottom-16 -translate-x-1/2 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors"
+                    className="absolute bottom-16 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors"
                     onClick={handleReset}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

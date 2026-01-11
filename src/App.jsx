@@ -1,9 +1,227 @@
 // App.jsx
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import ImpactChart from "./components/ImpactChart";
 import ArtGenerator from "./components/ArtGenerator";
 import CodeRain from "./components/CodeRain";
 import LilyFlower from "./components/LilyFlower";
+
+// Image Gallery Component
+const ImageGallery = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const images = [
+    { src: "/images/photo1.jpg", caption: "Những khoảnh khắc đáng nhớ" },
+    { src: "/images/photo2.jpg", caption: "Hoạt động tình nguyện" },
+    { src: "/images/photo3.jpg", caption: "Dự án Entelier" },
+    { src: "/images/photo4.jpg", caption: "Cùng các em nhỏ" },
+    { src: "/images/photo5.jpg", caption: "Hành trình của tôi" },
+  ];
+
+  const nextImage = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  return (
+    <motion.div
+      className="relative cursor-pointer group"
+      variants={{
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } }
+      }}
+      onClick={nextImage}
+    >
+      {/* Title hint */}
+      {/* <motion.div
+        className="text-center mb-4"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <span className="inline-flex items-center gap-2 px-4 py-2 bg-pastel-pink/20 rounded-full text-sm font-medium text-charcoal border border-pastel-pink/30">
+          <span>📸</span>
+          <span>Nhấn để xem thêm ảnh</span>
+          <motion.span
+            animate={{ x: [0, 5, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            →
+          </motion.span>
+        </span>
+      </motion.div> */}
+
+      {/* Background decoration */}
+      <div className="absolute inset-0 border-2 border-charcoal rounded-[2rem] transform rotate-2 mt-12"></div>
+
+      {/* Main image container */}
+      <div className="bg-white p-4 border-2 border-charcoal rounded-[2rem] transform -rotate-1 relative z-10">
+        <div className="h-64 bg-gradient-to-br from-warm-yellow/30 via-pastel-pink/20 to-periwinkle/30 rounded-xl flex items-center justify-center overflow-hidden relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, scale: 0.9, rotateY: -90 }}
+              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+              exit={{ opacity: 0, scale: 0.9, rotateY: 90 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              {/* Placeholder - replace with actual images */}
+              <div className="text-center p-4">
+                <span className="text-6xl mb-2 block">
+                  {['🎨', '🤝', '💡', '❤️', '🌟'][currentIndex]}
+                </span>
+                <span className="text-gray-500 italic text-sm">
+                  {images[currentIndex].caption}
+                </span>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Image counter */}
+          <div className="absolute bottom-3 right-3 bg-charcoal/80 text-white text-xs px-2 py-1 rounded-full">
+            {currentIndex + 1} / {images.length}
+          </div>
+        </div>
+
+        {/* Progress dots */}
+        <div className="flex justify-center gap-2 mt-3">
+          {images.map((_, i) => (
+            <motion.div
+              key={i}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-pastel-pink w-6' : 'bg-gray-300'
+                }`}
+              animate={i === currentIndex ? { scale: [1, 1.2, 1] } : {}}
+              transition={{ duration: 0.3 }}
+            />
+          ))}
+        </div>
+
+        {/* Hover hint */}
+        {/* <motion.div
+          className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          whileHover={{ scale: 1.05 }}
+        >
+          <span className="font-handwriting text-lg">Click để tiếp tục! ✨</span>
+        </motion.div> */}
+      </div>
+    </motion.div>
+  );
+};
+
+// Scroll Hint Component - Artistic Style
+const ScrollHint = ({ nextSection, dark = false }) => (
+  <motion.div
+    className="absolute bottom-6 -translate-x-1/2 flex flex-col items-center cursor-pointer group"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 1, duration: 0.5 }}
+    whileHover={{ scale: 1.05 }}
+  >
+    {/* Decorative brush stroke background */}
+    <div className="relative">
+      {/* Left brush stroke */}
+      <svg
+        className={`absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-8 ${dark ? 'text-gray-600' : 'text-pastel-pink/40'}`}
+        viewBox="0 0 50 20"
+      >
+        <path
+          d="M2 10 Q 10 5, 20 10 T 40 10 T 48 8"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          className="group-hover:stroke-pastel-pink transition-colors duration-300"
+        />
+      </svg>
+
+      {/* Right brush stroke */}
+      <svg
+        className={`absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-8 ${dark ? 'text-gray-600' : 'text-periwinkle/40'}`}
+        viewBox="0 0 50 20"
+      >
+        <path
+          d="M2 8 Q 10 15, 20 10 T 40 10 T 48 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          className="group-hover:stroke-periwinkle transition-colors duration-300"
+        />
+      </svg>
+
+      {/* Section name with artistic underline */}
+      <div className="relative px-6 py-2">
+        <span className={`text-sm font-medium tracking-wide ${dark ? 'text-gray-300' : 'text-gray-600'} group-hover:${dark ? 'text-white' : 'text-charcoal'} transition-colors`}>
+          {nextSection}
+        </span>
+
+        {/* Animated underline brush stroke */}
+        <motion.svg
+          className="absolute -bottom-1 left-0 w-full h-3"
+          viewBox="0 0 100 12"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
+        >
+          <motion.path
+            d="M5 6 Q 25 2, 50 6 T 95 6"
+            fill="none"
+            stroke={dark ? "#f9a8d4" : "#f9a8d4"}
+            strokeWidth="2"
+            strokeLinecap="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ delay: 1.5, duration: 0.8 }}
+          />
+        </motion.svg>
+      </div>
+    </div>
+
+    {/* Animated scroll icon with artistic touch */}
+    <motion.div
+      className="mt-3 relative"
+      animate={{ y: [0, 6, 0] }}
+      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+    >
+      {/* Mouse/scroll indicator */}
+      <div className={`w-6 h-10 rounded-full border-2 ${dark ? 'border-gray-400' : 'border-charcoal/50'} flex justify-center pt-2 group-hover:border-pastel-pink transition-colors duration-300`}>
+        <motion.div
+          className={`w-1.5 h-2.5 rounded-full ${dark ? 'bg-gray-400' : 'bg-charcoal/50'} group-hover:bg-pastel-pink transition-colors duration-300`}
+          animate={{ y: [0, 4, 0], opacity: [1, 0.5, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      {/* Small decorative dots */}
+      <motion.div
+        className={`absolute -left-3 top-1/2 w-1 h-1 rounded-full ${dark ? 'bg-periwinkle/50' : 'bg-pastel-pink/50'}`}
+        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}
+      />
+      <motion.div
+        className={`absolute -right-3 top-1/3 w-1.5 h-1.5 rounded-full ${dark ? 'bg-pastel-pink/50' : 'bg-periwinkle/50'}`}
+        animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+      />
+    </motion.div>
+
+    {/* Sparkle decorations on hover */}
+    <motion.span
+      className={`absolute -top-2 -right-4 text-xs ${dark ? 'text-yellow-300' : 'text-warm-yellow'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+      animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    >
+      ✦
+    </motion.span>
+    <motion.span
+      className={`absolute -bottom-1 -left-6 text-[10px] ${dark ? 'text-pink-300' : 'text-pastel-pink'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+      animate={{ rotate: [0, -10, 10, 0], scale: [1, 1.1, 1] }}
+      transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
+    >
+      ✧
+    </motion.span>
+  </motion.div>
+);
 
 // Section component với scroll snap
 const Section = ({ children, className }) => (
@@ -64,7 +282,7 @@ function App() {
   return (
     <div className="bg-creamy-white text-charcoal h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar selection:bg-pastel-pink">
 
-      {/* --- GIAI ĐOẠN 1: THE OBSERVER --- */}
+      {/* --- GIAI ĐOẠN 1: GIỚI THIỆU BẢN THÂN --- */}
       <Section className="bg-creamy-white">
         <motion.div
           className="max-w-4xl grid md:grid-cols-2 gap-10 items-center"
@@ -79,50 +297,54 @@ function App() {
               className="text-5xl font-bold mb-4 text-pastel-pink drop-shadow-md"
               variants={itemVariants}
             >
-              The Observer
+              Xin chào! 👋
             </motion.h2>
             <motion.h1
               className="text-4xl font-bold mb-6"
               variants={itemVariants}
             >
-              Nghệ thuật là ngôn ngữ không biên giới.
+              Tôi là <span className="text-periwinkle">Anh Thư</span>
             </motion.h1>
             <motion.p
               className="text-lg leading-relaxed mb-4"
               variants={itemVariants}
             >
-              Những ngày đầu tiên tại trung tâm Phúc Tuệ, tôi nhìn thấy một cô bé mặc váy vàng đang vẽ một bức tranh về mẹ của mình.
+              Một người trẻ đam mê <span className="font-semibold text-pastel-pink">Data Science</span> và tin rằng công nghệ có thể tạo ra những thay đổi tích cực cho xã hội.
             </motion.p>
             <motion.p
               className="text-lg leading-relaxed mb-4"
               variants={itemVariants}
             >
-              Trong nét vẽ ngây thơ ấy, tôi thấy sự khao khát được kết nối. Nghệ thuật không cần ngôn từ, nó nói thẳng vào trái tim.
+              Tôi yêu thích việc kết hợp giữa <span className="font-semibold text-periwinkle">nghệ thuật</span> và <span className="font-semibold text-pastel-pink">dữ liệu</span>, biến những con số khô khan thành câu chuyện có ý nghĩa.
             </motion.p>
             <motion.p
               className="text-lg leading-relaxed text-gray-600 italic"
               variants={itemVariants}
             >
-              Từ đó, tôi hiểu rằng việc quan sát và thấu hiểu là bước đầu tiên để tạo ra tác động có ý nghĩa.
+              "Hãy cùng tôi khám phá hành trình từ một người quan sát đến một người kiến tạo tác động."
             </motion.p>
+
+            {/* Quick Info Tags */}
+            <motion.div
+              className="flex flex-wrap gap-2 mt-6"
+              variants={itemVariants}
+            >
+              {['🎓 Học sinh', '💻 Data Enthusiast', '🎨 Yêu nghệ thuật', '❤️ Tình nguyện viên'].map((tag, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 bg-gradient-to-r from-pastel-pink/20 to-periwinkle/20 rounded-full text-sm border border-pastel-pink/30"
+                >
+                  {tag}
+                </span>
+              ))}
+            </motion.div>
           </motion.div>
 
-          <motion.div
-            className="relative cursor-pointer group"
-            variants={slideFromRight}
-            whileHover={{ scale: 1.02 }}
-          >
-            <div className="absolute inset-0 border-2 border-charcoal rounded-[2rem] transform rotate-2"></div>
-            <div className="bg-white p-4 border-2 border-charcoal rounded-[2rem] transform -rotate-1 relative z-10">
-              <div className="h-64 bg-warm-yellow/30 rounded-xl flex items-center justify-center">
-                <span className="text-gray-400 italic">[Hình ảnh cô bé váy vàng]</span>
-              </div>
-              <div className="absolute bottom-10 left-10 bg-white px-4 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="font-handwriting text-xl">"Mẹ ơi..."</span>
-              </div>
-            </div>
-          </motion.div>
+          {/* Right - Image Gallery */}
+          <ImageGallery />
         </motion.div>
+
+        <ScrollHint nextSection="The Connector" />
       </Section>
 
       {/* --- GIAI ĐOẠN 2: THE CONNECTOR --- */}
@@ -185,47 +407,137 @@ function App() {
             <ImpactChart />
           </motion.div>
         </motion.div>
+
+        <ScrollHint nextSection="The Realization" />
       </Section>
 
       {/* --- GIAI ĐOẠN 3: THE REALIZATION --- */}
-      <Section className="bg-gray-900 text-creamy-white relative">
-        <CodeRain />
+      <Section className="bg-gradient-to-br from-charcoal via-gray-800 to-charcoal relative">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
+          <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-pastel-pink/20 blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-periwinkle/20 blur-3xl"></div>
+          <svg className="absolute inset-0 w-full h-full">
+            <pattern id="rain-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+              <line x1="20" y1="0" x2="20" y2="20" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+            </pattern>
+            <rect x="0" y="0" width="100%" height="100%" fill="url(#rain-pattern)" />
+          </svg>
+        </div>
 
         <motion.div
-          className="max-w-3xl text-center z-10"
+          className="max-w-5xl w-full grid md:grid-cols-2 gap-12 items-center z-10"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
-          <motion.h2
-            className="text-6xl md:text-7xl font-bold mb-6 text-blue-300"
-            variants={scaleUp}
-          >
-            1600mm
-          </motion.h2>
-          <motion.p
-            className="text-xl italic mb-6 text-gray-300"
-            variants={itemVariants}
-          >
-            "Khi cơn lũ ập đến Huế, tôi nhận ra tiền bạc là chưa đủ.
-            Con số 1600mm không vô tri, nó mang nỗi đau của hàng ngàn gia đình."
-          </motion.p>
-          <motion.p
-            className="text-lg mb-8 text-gray-400"
-            variants={itemVariants}
-          >
-            Tôi học được rằng Data Science không chỉ là con số và biểu đồ.
-            Đó là công cụ để thấu hiểu, dự đoán và hành động có ý nghĩa.
-          </motion.p>
-          <motion.div
-            className="p-6 border-l-4 border-pastel-pink bg-white/10 text-left backdrop-blur-sm"
-            variants={slideFromLeft}
-          >
-            <p className="font-mono text-sm text-pastel-pink mb-2">Insight:</p>
-            <p className="text-lg">Data Science without Empathy is empty.<br />Empathy without Data is blind.</p>
+          {/* Left content */}
+          <motion.div variants={slideFromLeft}>
+            <motion.span
+              className="inline-block px-4 py-2 bg-pastel-pink/20 backdrop-blur-sm rounded-full text-sm font-mono mb-4 text-pastel-pink border border-pastel-pink/30"
+              variants={itemVariants}
+            >
+              💧 Khoảnh khắc nhận ra
+            </motion.span>
+            <motion.h2
+              className="text-4xl font-bold mb-6 text-creamy-white"
+              variants={itemVariants}
+            >
+              The <span className="text-pastel-pink">Realization</span>
+            </motion.h2>
+            <motion.p
+              className="text-lg leading-relaxed mb-4 text-gray-300"
+              variants={itemVariants}
+            >
+              Khi cơn lũ ập đến Huế, tôi nhận ra tiền bạc là chưa đủ.
+              Con số <span className="text-periwinkle font-bold">1600mm</span> không vô tri — nó mang nỗi đau của hàng ngàn gia đình.
+            </motion.p>
+            <motion.p
+              className="text-lg leading-relaxed mb-6 text-gray-400"
+              variants={itemVariants}
+            >
+              Tôi học được rằng Data Science không chỉ là con số và biểu đồ.
+              Đó là công cụ để thấu hiểu, dự đoán và hành động có ý nghĩa.
+            </motion.p>
+
+            {/* Tags */}
+            <motion.div
+              className="flex flex-wrap gap-2"
+              variants={itemVariants}
+            >
+              {['Empathy', 'Data for Good', 'Social Impact'].map((tag, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 bg-white/10 rounded-full text-sm text-gray-300 border border-white/20"
+                >
+                  {tag}
+                </span>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Right - Visual */}
+          <motion.div variants={slideFromRight} className="flex flex-col items-center">
+            {/* Big number display */}
+            <motion.div
+              className="relative mb-8"
+              variants={scaleUp}
+            >
+              <motion.span
+                className="text-8xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pastel-pink via-periwinkle to-warm-yellow"
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                style={{
+                  backgroundSize: '200% 200%'
+                }}
+              >
+                1600
+              </motion.span>
+              <span className="absolute -bottom-2 right-0 text-2xl text-gray-400 font-mono">mm</span>
+
+              {/* Animated rain drops */}
+              <motion.div
+                className="absolute -top-4 left-1/4 text-2xl"
+                animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                💧
+              </motion.div>
+              <motion.div
+                className="absolute -top-2 right-1/4 text-xl"
+                animate={{ y: [0, 15, 0], opacity: [0.3, 0.8, 0.3] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+              >
+                💧
+              </motion.div>
+            </motion.div>
+
+            {/* Insight box */}
+            <motion.div
+              className="w-full p-6 bg-gradient-to-r from-pastel-pink/10 to-periwinkle/10 backdrop-blur-sm rounded-2xl border border-white/20"
+              variants={itemVariants}
+            >
+              <p className="font-mono text-sm text-pastel-pink mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 bg-pastel-pink rounded-full animate-pulse"></span>
+                Insight
+              </p>
+              <p className="text-lg text-creamy-white leading-relaxed">
+                <span className="text-periwinkle font-medium">Data Science</span> without Empathy is empty.
+                <br />
+                <span className="text-pastel-pink font-medium">Empathy</span> without Data is blind.
+              </p>
+            </motion.div>
           </motion.div>
         </motion.div>
+
+        <ScrollHint nextSection="Living Gallery" dark />
       </Section>
 
       {/* --- GIAI ĐOẠN 4: THE VISIONARY --- */}
@@ -293,14 +605,16 @@ function App() {
             </motion.div>
           </motion.div>
 
-          {/* Right - Art Generator */}
+          {/* Right - Hành trình Nở Hoa */}
           <motion.div className="flex justify-center" variants={slideFromRight}>
-            <ArtGenerator />
+            <LilyFlower />
           </motion.div>
         </motion.div>
+
+        <ScrollHint nextSection="Why VinUni?" />
       </Section>
 
-      {/* --- GIAI ĐOẠN 5: THE GROWTH - INTERACTIVE STORYTELLING --- */}
+      {/* --- GIAI ĐOẠN 5: THE GROWTH - INTERACTIVE STORYTELLING (TẠM ĐÓNG) ---
       <Section className="bg-gradient-to-b from-creamy-white to-pink-50">
         <motion.div
           className="max-w-6xl w-full"
@@ -309,7 +623,6 @@ function App() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {/* Header */}
           <motion.div className="text-center mb-8" variants={itemVariants}>
             <motion.h2
               className="text-4xl md:text-5xl font-bold mb-4"
@@ -328,12 +641,10 @@ function App() {
             </motion.p>
           </motion.div>
 
-          {/* Interactive Lily Flower */}
           <motion.div variants={scaleUp}>
             <LilyFlower />
           </motion.div>
 
-          {/* Caption */}
           <motion.p
             className="text-center text-sm text-gray-500 italic mt-4"
             variants={itemVariants}
@@ -342,10 +653,13 @@ function App() {
             tôi đã học cách nở rộ theo cách của riêng mình."
           </motion.p>
         </motion.div>
-      </Section>
 
+        <ScrollHint nextSection="Why VinUni?" />
+      </Section>
+      --- */
+      }
       {/* --- GIAI ĐOẠN 6: WHY VINUNI? --- */}
-      <Section className="bg-gradient-to-br from-[#1a365d] via-[#2c5282] to-[#2b6cb0] text-white relative overflow-hidden">
+      < Section className="bg-gradient-to-br from-[#1a365d] via-[#2c5282] to-[#2b6cb0] text-white relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white rounded-full"></div>
@@ -463,6 +777,8 @@ function App() {
             ))}
           </motion.div>
         </motion.div>
+
+        <ScrollHint nextSection="Liên hệ" dark />
       </Section>
 
       {/* --- FOOTER: CONTACT & CTA --- */}
@@ -592,7 +908,7 @@ function App() {
         </motion.div>
       </Section>
 
-    </div>
+    </div >
   );
 }
 
