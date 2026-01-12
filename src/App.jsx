@@ -3,6 +3,88 @@ import { motion, AnimatePresence } from "framer-motion";
 import ImpactChart from "./components/ImpactChart";
 import LilyFlower from "./components/LilyFlower";
 
+// Floating Photo Collage Component - Optimized
+const FloatingPhotoCollage = () => {
+  const photos = [
+    { id: 1, src: "/images/cjc1.jpg", size: "w-32 h-40", position: "top-[5%] left-[2%]", rotate: -8, floatDuration: 4 },
+    { id: 2, src: "/images/cjc7.jpg", size: "w-28 h-36", position: "top-[3%] left-[20%]", rotate: 6, floatDuration: 4.5 },
+    { id: 3, src: "/images/DSC_1241.jpeg", size: "w-36 h-44", position: "top-[8%] right-[3%]", rotate: 10, floatDuration: 5 },
+    { id: 4, src: "/images/ente1.jpg", size: "w-28 h-36", position: "top-[4%] right-[22%]", rotate: -6, floatDuration: 4.2 },
+    { id: 5, src: "/images/ente2.jpg", size: "w-28 h-36", position: "top-[32%] left-[1%]", rotate: -12, floatDuration: 4.8 },
+    { id: 6, src: "/images/ente3.jpg", size: "w-32 h-40", position: "top-[55%] left-[2%]", rotate: 8, floatDuration: 4.3 },
+    { id: 7, src: "/images/ente4.jpg", size: "w-28 h-36", position: "top-[35%] right-[1%]", rotate: -8, floatDuration: 4.6 },
+    { id: 8, src: "/images/ente5.jpg", size: "w-32 h-40", position: "top-[58%] right-[1%]", rotate: 12, floatDuration: 5.2 },
+    { id: 9, src: "/images/IMG_5201.JPG", size: "w-28 h-36", position: "bottom-[15%] left-[3%]", rotate: 5, floatDuration: 4.4 },
+    { id: 10, src: "/images/sap1.jpg", size: "w-28 h-36", position: "bottom-[5%] left-[20%]", rotate: -10, floatDuration: 4.7 },
+    { id: 11, src: "/images/sap2.jpg", size: "w-32 h-40", position: "bottom-[18%] right-[4%]", rotate: -5, floatDuration: 4.1 },
+    { id: 12, src: "/images/sap3.jpg", size: "w-28 h-36", position: "bottom-[4%] right-[20%]", rotate: 8, floatDuration: 4.9 },
+    { id: 13, src: "/images/sap4.jpg", size: "w-26 h-32", position: "top-[20%] left-[6%]", rotate: 14, floatDuration: 5.1 },
+    { id: 14, src: "/images/yosci1.jpg", size: "w-26 h-32", position: "bottom-[32%] right-[2%]", rotate: -14, floatDuration: 4.5 },
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 hidden md:block">
+      {photos.map((photo, index) => (
+        <div
+          key={photo.id}
+          className={`absolute ${photo.position} ${photo.size} pointer-events-auto cursor-pointer transform hover:scale-125 hover:rotate-0 hover:z-50 transition-all duration-300 will-change-transform`}
+          style={{
+            transform: `rotate(${photo.rotate}deg)`,
+            animation: `float${index % 3} ${photo.floatDuration}s ease-in-out infinite`,
+            animationDelay: `${index * 0.2}s`
+          }}
+        >
+          {/* Polaroid-style frame */}
+          <div className="relative bg-white p-1.5 pb-5 rounded-sm shadow-md hover:shadow-xl hover:shadow-pastel-pink/20 transition-shadow duration-300 h-full">
+            {/* Photo */}
+            <div className="w-full h-[calc(100%-1rem)] overflow-hidden rounded-[2px] bg-gradient-to-br from-pastel-pink/20 to-periwinkle/20">
+              <img
+                src={photo.src}
+                alt={`Hoạt động ${photo.id}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              {/* Fallback placeholder */}
+              <div className="w-full h-full bg-gradient-to-br from-pastel-pink/30 via-periwinkle/20 to-warm-yellow/30 items-center justify-center text-3xl hidden">
+                {['🎨', '🤝', '💡', '❤️', '🌟', '📸', '🎓', '✨', '🌸', '💫', '🎭', '🌈', '🦋', '🌺'][photo.id - 1]}
+              </div>
+            </div>
+
+            {/* Tape decoration */}
+            <div
+              className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-10 h-3 bg-warm-yellow/70 rounded-sm"
+              style={{ transform: `translateX(-50%) rotate(${photo.id % 2 === 0 ? 3 : -3}deg)` }}
+            />
+
+            {/* Small caption line */}
+            <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-3/4 h-[2px] bg-gray-200 rounded-full" />
+          </div>
+        </div>
+      ))}
+
+      {/* CSS Animations - defined once */}
+      <style>{`
+        @keyframes float0 {
+          0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
+          50% { transform: translateY(-8px) rotate(var(--rotate, 0deg)); }
+        }
+        @keyframes float1 {
+          0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
+          50% { transform: translateY(-6px) rotate(var(--rotate, 0deg)); }
+        }
+        @keyframes float2 {
+          0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
+          50% { transform: translateY(-10px) rotate(var(--rotate, 0deg)); }
+        }
+      `}</style>
+    </div>
+  );
+};
+
 // Image Gallery Component
 const ImageGallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -456,7 +538,7 @@ const RainEffect = () => {
 
 // Section component với scroll snap
 const Section = ({ children, className, id }) => (
-  <section id={id} className={`min-h-screen w-full snap-start flex flex-col items-center justify-center p-8 relative overflow-hidden ${className}`}>
+  <section id={id} className={`min-h-screen w-full md:snap-start flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden ${className}`}>
     {children}
   </section>
 );
@@ -511,15 +593,18 @@ const scaleUp = {
 
 function App() {
   return (
-    <div className="bg-creamy-white text-charcoal h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar selection:bg-pastel-pink">
+    <div className="bg-creamy-white text-charcoal h-screen overflow-y-scroll md:snap-y md:snap-mandatory scroll-smooth no-scrollbar selection:bg-pastel-pink">
 
       {/* Mini Navigation */}
       <MiniNav />
 
       {/* --- GIAI ĐOẠN 1: GIỚI THIỆU BẢN THÂN --- */}
       <Section id="intro" className="bg-creamy-white">
+        {/* Floating Photo Collage Background */}
+        <FloatingPhotoCollage />
+
         <motion.div
-          className="max-w-4xl grid md:grid-cols-2 gap-10 items-center"
+          className="max-w-4xl grid md:grid-cols-2 gap-10 items-center relative z-10"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
