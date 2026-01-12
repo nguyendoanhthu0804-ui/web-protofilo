@@ -220,24 +220,26 @@ const ScrollHint = ({ nextSection, dark = false }) => (
   </motion.div>
 );
 
-// Mini Navigation Component
 const MiniNav = () => {
   const [activeSection, setActiveSection] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const sections = [
-    { id: 'intro', label: 'Giới thiệu', number: '01' },
-    { id: 'connector', label: 'The Connector', number: '02' },
-    { id: 'realization', label: 'The Realization', number: '03' },
-    { id: 'gallery', label: 'Living Gallery', number: '04' },
-    { id: 'vinuni', label: 'Why VinUni?', number: '05' },
-    { id: 'contact', label: 'Liên hệ', number: '06' },
+    { id: 'intro', label: 'Giới thiệu', icon: '👋', color: '#f9a8d4' },
+    { id: 'connector', label: 'The Connector', icon: '🔗', color: '#a5b4fc' },
+    { id: 'realization', label: 'The Realization', icon: '💡', color: '#fcd34d' },
+    { id: 'gallery', label: 'Living Gallery', icon: '🎨', color: '#f9a8d4' },
+    { id: 'vinuni', label: 'Why VinUni?', icon: '🎓', color: '#60a5fa' },
+    { id: 'contact', label: 'Liên hệ', icon: '📧', color: '#a5b4fc' },
   ];
 
   // Track which section is in view
   useEffect(() => {
+    const scrollContainer = document.querySelector('.snap-y');
+
     const observerOptions = {
-      root: null,
-      rootMargin: '-50% 0px -50% 0px', // Trigger when section is in middle of viewport
+      root: scrollContainer,
+      rootMargin: '-50% 0px -50% 0px',
       threshold: 0
     };
 
@@ -254,7 +256,6 @@ const MiniNav = () => {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    // Observe all sections
     sections.forEach((section) => {
       const element = document.getElementById(section.id);
       if (element) {
@@ -266,82 +267,160 @@ const MiniNav = () => {
   }, []);
 
   const scrollToSection = (index) => {
-    const sectionElements = document.querySelectorAll('section');
-    if (sectionElements[index]) {
-      sectionElements[index].scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById(sections[index].id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
     <motion.nav
-      className="fixed top-6 left-6 z-50 hidden md:block"
-      initial={{ opacity: 0, x: -20 }}
+      className="fixed right-6 top-1/2 z-50 hidden md:flex flex-col items-center"
+      initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.5, duration: 0.6 }}
+      style={{ transform: 'translateY(-50%)' }}
     >
-      <div className="flex flex-col gap-1">
+      {/* Dots container - này sẽ được căn giữa */}
+      <div className="relative flex flex-col items-center gap-3">
+        {/* Progress line background - chỉ nằm trong vùng dots */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 w-[2px] bg-gray-300/30 rounded-full"
+          style={{ top: 8, bottom: 8 }}
+        />
+
+        {/* Active progress line */}
+        <motion.div
+          className="absolute left-1/2 -translate-x-1/2 w-[2px] rounded-full"
+          style={{
+            top: 8,
+            background: 'linear-gradient(180deg, #f9a8d4, #a5b4fc, #fcd34d)',
+          }}
+          initial={{ height: 0 }}
+          animate={{
+            height: activeSection === 0 ? 0 : `calc(${(activeSection / (sections.length - 1)) * 100}% - 16px)`
+          }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        />
+
         {sections.map((section, index) => {
           const isActive = activeSection === index;
+          const isHovered = hoveredIndex === index;
 
           return (
-            <motion.button
+            <motion.div
               key={section.id}
-              onClick={() => scrollToSection(index)}
-              className={`group flex items-center gap-3 text-left py-1.5 px-2 rounded-lg transition-all duration-300 ${isActive ? 'bg-charcoal/5' : 'hover:bg-charcoal/5'
-                }`}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: isActive ? 4 : 0 }}
+              className="relative flex items-center"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 + index * 0.1 }}
-              whileHover={{ x: 4 }}
             >
-              {/* Number */}
-              <span className={`text-[10px] font-mono transition-colors w-4 ${isActive ? 'text-pastel-pink' : 'text-gray-300 group-hover:text-pastel-pink'
-                }`}>
-                {section.number}
-              </span>
+              {/* Tooltip */}
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.div
+                    className="absolute right-full mr-4 px-4 py-2 rounded-xl whitespace-nowrap flex items-center gap-2"
+                    initial={{ opacity: 0, x: 10, scale: 0.9 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: 10, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                    style={{
+                      background: 'rgba(255,255,255,0.95)',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                      border: `2px solid ${section.color}`
+                    }}
+                  >
+                    <span className="text-lg">{section.icon}</span>
+                    <span className="text-sm font-semibold text-charcoal">{section.label}</span>
+                    {/* Arrow */}
+                    <div
+                      className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full w-0 h-0"
+                      style={{
+                        borderTop: '6px solid transparent',
+                        borderBottom: '6px solid transparent',
+                        borderLeft: `6px solid ${section.color}`
+                      }}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-              {/* Dot indicator */}
-              <motion.span
-                className={`rounded-full transition-all duration-300 ${isActive
-                  ? 'w-2 h-2 bg-pastel-pink'
-                  : 'w-1.5 h-1.5 bg-gray-300 group-hover:bg-pastel-pink group-hover:scale-125'
-                  }`}
-                animate={isActive ? { scale: [1, 1.2, 1] } : {}}
-                transition={{ duration: 1.5, repeat: isActive ? Infinity : 0 }}
-              />
-
-              {/* Label - visible when active or on hover */}
-              <motion.span
-                className={`text-xs whitespace-nowrap transition-all duration-300 ${isActive
-                  ? 'text-charcoal opacity-100 translate-x-0'
-                  : 'text-gray-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0'
-                  }`}
+              {/* Dot button */}
+              <motion.button
+                onClick={() => scrollToSection(index)}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className="relative z-10 flex items-center justify-center"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
               >
-                {section.label}
-              </motion.span>
+                {/* Outer ring for active */}
+                {isActive && (
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: `${section.color}30`,
+                      boxShadow: `0 0 20px ${section.color}50`
+                    }}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 2.2 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
 
-              {/* Active indicator line */}
-              {isActive && (
+                {/* Pulse effect for active */}
+                {isActive && (
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: section.color }}
+                    animate={{ scale: [1, 2.5, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                )}
+
+                {/* Main dot */}
                 <motion.div
-                  className="absolute left-0 w-0.5 h-4 bg-pastel-pink rounded-full"
-                  layoutId="activeIndicator"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              )}
-            </motion.button>
+                  className="w-4 h-4 rounded-full relative z-10 flex items-center justify-center transition-all duration-300"
+                  style={{
+                    background: isActive ? section.color : '#d1d5db',
+                    boxShadow: isActive ? `0 0 10px ${section.color}` : 'none'
+                  }}
+                  animate={{
+                    scale: isActive ? 1.2 : 1,
+                  }}
+                >
+                  {/* Inner dot */}
+                  <div
+                    className="w-2 h-2 rounded-full bg-white transition-all duration-300"
+                    style={{ opacity: isActive ? 1 : 0 }}
+                  />
+                </motion.div>
+              </motion.button>
+            </motion.div>
           );
         })}
       </div>
 
-      {/* Decorative line */}
+      {/* Section counter at bottom - nằm ngoài dots container */}
       <motion.div
-        className="absolute left-[26px] top-0 w-[1px] h-full bg-gradient-to-b from-transparent via-gray-200 to-transparent -z-10"
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 1 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
-      />
+        className="mt-4 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+      >
+        <motion.span
+          className="text-xs font-bold"
+          style={{ color: sections[activeSection]?.color }}
+          key={activeSection}
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          {String(activeSection + 1).padStart(2, '0')}
+        </motion.span>
+        <span className="text-xs text-gray-400">/</span>
+        <span className="text-xs text-gray-400">{String(sections.length).padStart(2, '0')}</span>
+      </motion.div>
     </motion.nav>
   );
 };
@@ -1093,18 +1172,30 @@ function App() {
 
           {/* Scroll to top hint */}
           <motion.div
-            className="mt-8"
+            className="mt-8 flex justify-center w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
           >
             <motion.button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-gray-500 hover:text-gray-300 transition-colors"
-              whileHover={{ y: -3 }}
+              onClick={() => {
+                const introSection = document.getElementById('intro');
+                if (introSection) {
+                  introSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="group flex flex-col items-center gap-2 text-gray-500 hover:text-pastel-pink transition-all duration-300"
+              whileHover={{ y: -5, scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <span className="text-2xl">↑</span>
-              <p className="text-xs mt-1">Về đầu trang</p>
+              <motion.div
+                className="w-12 h-12 rounded-full border-2 border-gray-600 group-hover:border-pastel-pink flex items-center justify-center transition-all duration-300 group-hover:bg-pastel-pink/10"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <span className="text-2xl">↑</span>
+              </motion.div>
+              <p className="text-xs font-medium">Về đầu trang</p>
             </motion.button>
           </motion.div>
         </motion.div>
