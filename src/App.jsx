@@ -281,28 +281,8 @@ const MiniNav = () => {
       transition={{ delay: 0.5, duration: 0.6 }}
       style={{ transform: 'translateY(-50%)' }}
     >
-      {/* Dots container - này sẽ được căn giữa */}
-      <div className="relative flex flex-col items-center gap-3">
-        {/* Progress line background - chỉ nằm trong vùng dots */}
-        <div
-          className="absolute left-1/2 -translate-x-1/2 w-[2px] bg-gray-300/30 rounded-full"
-          style={{ top: 8, bottom: 8 }}
-        />
-
-        {/* Active progress line */}
-        <motion.div
-          className="absolute left-1/2 -translate-x-1/2 w-[2px] rounded-full"
-          style={{
-            top: 8,
-            background: 'linear-gradient(180deg, #f9a8d4, #a5b4fc, #fcd34d)',
-          }}
-          initial={{ height: 0 }}
-          animate={{
-            height: activeSection === 0 ? 0 : `calc(${(activeSection / (sections.length - 1)) * 100}% - 16px)`
-          }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        />
-
+      {/* Navigation container with labels always visible */}
+      <div className="relative flex flex-col items-end gap-2">
         {sections.map((section, index) => {
           const isActive = activeSection === index;
           const isHovered = hoveredIndex === index;
@@ -310,92 +290,76 @@ const MiniNav = () => {
           return (
             <motion.div
               key={section.id}
-              className="relative flex items-center"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
+              className="relative flex items-center gap-3"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 + index * 0.1 }}
             >
-              {/* Tooltip */}
-              <AnimatePresence>
-                {isHovered && (
-                  <motion.div
-                    className="absolute right-full mr-4 px-4 py-2 rounded-xl whitespace-nowrap flex items-center gap-2"
-                    initial={{ opacity: 0, x: 10, scale: 0.9 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    exit={{ opacity: 0, x: 10, scale: 0.9 }}
-                    transition={{ duration: 0.2 }}
-                    style={{
-                      background: 'rgba(255,255,255,0.95)',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                      border: `2px solid ${section.color}`
-                    }}
-                  >
-                    <span className="text-lg">{section.icon}</span>
-                    <span className="text-sm font-semibold text-charcoal">{section.label}</span>
-                    {/* Arrow */}
-                    <div
-                      className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full w-0 h-0"
-                      style={{
-                        borderTop: '6px solid transparent',
-                        borderBottom: '6px solid transparent',
-                        borderLeft: `6px solid ${section.color}`
-                      }}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Dot button */}
+              {/* Always visible label */}
               <motion.button
                 onClick={() => scrollToSection(index)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className="relative z-10 flex items-center justify-center"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-300"
+                style={{
+                  background: isActive
+                    ? `${section.color}25`
+                    : isHovered
+                      ? 'rgba(255,255,255,0.9)'
+                      : 'rgba(255,255,255,0.7)',
+                  boxShadow: isActive
+                    ? `0 4px 15px ${section.color}40`
+                    : isHovered
+                      ? '0 4px 15px rgba(0,0,0,0.1)'
+                      : '0 2px 8px rgba(0,0,0,0.05)',
+                  border: isActive
+                    ? `2px solid ${section.color}`
+                    : '2px solid transparent',
+                }}
+                whileHover={{ scale: 1.05, x: -5 }}
+                whileTap={{ scale: 0.95 }}
               >
-                {/* Outer ring for active */}
-                {isActive && (
-                  <motion.div
-                    className="absolute inset-0 rounded-full"
-                    style={{
-                      background: `${section.color}30`,
-                      boxShadow: `0 0 20px ${section.color}50`
-                    }}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 2.2 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                )}
+                {/* Icon */}
+                <span className="text-base">{section.icon}</span>
 
-                {/* Pulse effect for active */}
-                {isActive && (
-                  <motion.div
-                    className="absolute inset-0 rounded-full"
-                    style={{ background: section.color }}
-                    animate={{ scale: [1, 2.5, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                )}
-
-                {/* Main dot */}
-                <motion.div
-                  className="w-4 h-4 rounded-full relative z-10 flex items-center justify-center transition-all duration-300"
+                {/* Label */}
+                <span
+                  className="text-xs font-medium transition-colors duration-300"
                   style={{
-                    background: isActive ? section.color : '#d1d5db',
-                    boxShadow: isActive ? `0 0 10px ${section.color}` : 'none'
-                  }}
-                  animate={{
-                    scale: isActive ? 1.2 : 1,
+                    color: isActive ? section.color : '#6b7280',
+                    fontWeight: isActive ? 600 : 500
                   }}
                 >
-                  {/* Inner dot */}
-                  <div
-                    className="w-2 h-2 rounded-full bg-white transition-all duration-300"
-                    style={{ opacity: isActive ? 1 : 0 }}
-                  />
-                </motion.div>
+                  {section.label}
+                </span>
+
+                {/* Dot indicator */}
+                <motion.div
+                  className="w-2 h-2 rounded-full transition-all duration-300"
+                  style={{
+                    background: isActive ? section.color : '#d1d5db',
+                    boxShadow: isActive ? `0 0 8px ${section.color}` : 'none'
+                  }}
+                  animate={{
+                    scale: isActive ? [1, 1.3, 1] : 1,
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: isActive ? Infinity : 0,
+                  }}
+                />
               </motion.button>
+
+              {/* Active indicator line */}
+              {isActive && (
+                <motion.div
+                  className="absolute -right-3 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full"
+                  style={{ background: section.color }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
             </motion.div>
           );
         })}
