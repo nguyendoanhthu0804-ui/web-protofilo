@@ -757,7 +757,7 @@ const LilyFlower = () => {
             </div>
 
             {/* Message khi hoàn thành */}
-            <AnimatePresence>
+            {/* <AnimatePresence>
                 {isFullyBloomed && (
                     <motion.div
                         className="absolute top-4 -translate-x-1/2 bg-gradient-to-r from-pink-400 to-rose-400 text-white px-6 py-3 rounded-full shadow-lg"
@@ -770,7 +770,7 @@ const LilyFlower = () => {
                         </p>
                     </motion.div>
                 )}
-            </AnimatePresence>
+            </AnimatePresence> */}
 
             {/* Reset button */}
             {collectedItems.length > 0 && (
