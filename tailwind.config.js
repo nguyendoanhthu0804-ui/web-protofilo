@@ -4,14 +4,14 @@ export default {
     theme: {
         extend: {
             colors: {
-                'pastel-pink': '#FFD1DC',     // Chủ đạo
-                'creamy-white': '#FDFBF7',    // Nền
-                'periwinkle': '#CCCCFF',      // Tech/Data
-                'warm-yellow': '#FFEFD5',     // Điểm nhấn
-                'charcoal': '#36454F',        // Chữ
+                'pastel-pink': '#FFD1DC',    
+                'creamy-white': '#FDFBF7',   
+                'periwinkle': '#CCCCFF',     
+                'warm-yellow': '#FFEFD5',    
+                'charcoal': '#36454F',       
             },
             fontFamily: {
-                'handwriting': ['Patrick Hand', 'cursive'], // Bạn nên import font này từ Google Fonts
+                'handwriting': ['Patrick Hand', 'cursive'],
                 'mono': ['Fira Code', 'monospace'],
             }
         },

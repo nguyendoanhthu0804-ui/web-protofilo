@@ -38,7 +38,7 @@ const ImpactChart = () => {
                 </defs>
             </svg>
 
-            <h3 className="text-charcoal font-bold mb-4" style={{ fontFamily: "'Caveat', cursive" }}>
+            <h3 className="text-charcoal font-bold mb-4 font-mono">
                 Hiệu quả gây quỹ (Fundraising)
             </h3>
             <div className="flex items-end gap-8 h-48">

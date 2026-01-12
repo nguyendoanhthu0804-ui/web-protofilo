@@ -54,16 +54,31 @@ const draggableItems = [
 ];
 
 // Component cho từng item có thể kéo
-const DraggableItem = ({ item, onDragEnd, isCollected }) => {
+const DraggableItem = ({ item, onDragEnd, isCollected, isResetting, itemIndex }) => {
     const [isDragging, setIsDragging] = useState(false);
+
+    // Tính toán hướng văng ra dựa trên vị trí ban đầu (ngược lại để bay từ tâm ra)
+    const getEjectDirection = () => {
+        const pos = item.position;
+        let x = 0, y = 0;
+        // Đảo ngược hướng: items bên trái cần bay từ phải (tâm) sang trái
+        if (pos.left) x = 120;  // Bay từ tâm (phải) về vị trí gốc (trái)
+        if (pos.right) x = -120; // Bay từ tâm (trái) về vị trí gốc (phải)
+        if (pos.top) y = 80;    // Bay từ tâm (dưới) về vị trí gốc (trên)
+        if (pos.bottom) y = -80; // Bay từ tâm (trên) về vị trí gốc (dưới)
+        return { x, y };
+    };
+
+    const ejectDir = getEjectDirection();
+    const staggerDelay = itemIndex * 0.08; // Delay cho mỗi item
 
     return (
         <motion.div
-            className={`absolute cursor-grab active:cursor-grabbing z-20 ${isCollected ? 'pointer-events-none' : ''}`}
+            className={`absolute cursor-grab active:cursor-grabbing z-20 ${isCollected && !isResetting ? 'pointer-events-none' : ''}`}
             style={{
                 ...item.position,
             }}
-            drag
+            drag={!isResetting}
             dragConstraints={{ top: -200, left: -200, right: 200, bottom: 200 }}
             dragElastic={0.8}
             dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
@@ -73,11 +88,24 @@ const DraggableItem = ({ item, onDragEnd, isCollected }) => {
                 onDragEnd(item.id, info);
             }}
             whileDrag={{ scale: 1.2, zIndex: 100 }}
+            initial={false}
             animate={{
-                opacity: isCollected ? 0 : 1,
-                scale: isCollected ? 0 : 1,
+                opacity: isCollected && !isResetting ? 0 : 1,
+                scale: isCollected && !isResetting ? 0.3 : 1,
+                x: isResetting ? [ejectDir.x, ejectDir.x * 0.3, 0] : 0,
+                y: isResetting ? [ejectDir.y, ejectDir.y * 0.3, 0] : 0,
             }}
-            transition={{ duration: 0.3 }}
+            transition={{
+                duration: isResetting ? 0.7 : 0.3,
+                delay: isResetting ? staggerDelay : 0,
+                ease: isResetting ? [0.34, 1.56, 0.64, 1] : "easeOut", // Custom spring-like easing
+                opacity: { duration: isResetting ? 0.2 : 0.3, delay: isResetting ? staggerDelay : 0 },
+                scale: {
+                    duration: isResetting ? 0.5 : 0.3,
+                    delay: isResetting ? staggerDelay : 0,
+                    ease: "backOut"
+                }
+            }}
         >
             <motion.div
                 className="flex flex-col items-center gap-1"
@@ -122,6 +150,8 @@ const DraggableItem = ({ item, onDragEnd, isCollected }) => {
 const LilyFlower = () => {
     const [collectedItems, setCollectedItems] = useState([]);
     const [isFullyBloomed, setIsFullyBloomed] = useState(false);
+    const [isResetting, setIsResetting] = useState(false);
+    const [windEffect, setWindEffect] = useState(0); // 0: no wind, 1-6: wind intensity based on item
     const flowerRef = useRef(null);
 
     // Tính toán mức độ nở hoa (0-100%)
@@ -152,6 +182,10 @@ const LilyFlower = () => {
                 dropY <= flowerRect.bottom + 50;
 
             if (isInFlowerZone && !collectedItems.includes(itemId)) {
+                // Trigger wind effect
+                setWindEffect(prev => prev + 1);
+                setTimeout(() => setWindEffect(0), 800);
+
                 setCollectedItems(prev => {
                     const newItems = [...prev, itemId];
                     if (newItems.length === draggableItems.length) {
@@ -163,10 +197,20 @@ const LilyFlower = () => {
         }
     };
 
-    // Reset trạng thái
+    // Reset trạng thái với animation văng ra mượt mà
     const handleReset = () => {
-        setCollectedItems([]);
+        // Bắt đầu animation văng ra
+        setIsResetting(true);
         setIsFullyBloomed(false);
+
+        // Reset collectedItems ngay để items xuất hiện và bay ra
+        setCollectedItems([]);
+
+        // Đợi animation hoàn thành rồi mới tắt trạng thái resetting
+        // Thời gian = duration (0.7s) + stagger delay của item cuối (5 * 0.08 = 0.4s) + buffer
+        setTimeout(() => {
+            setIsResetting(false);
+        }, 1200);
     };
 
     return (
@@ -206,12 +250,14 @@ const LilyFlower = () => {
             </AnimatePresence>
 
             {/* Các items có thể kéo */}
-            {draggableItems.map(item => (
+            {draggableItems.map((item, index) => (
                 <DraggableItem
                     key={item.id}
                     item={item}
                     onDragEnd={handleDragEnd}
                     isCollected={collectedItems.includes(item.id)}
+                    isResetting={isResetting}
+                    itemIndex={index}
                 />
             ))}
 
@@ -229,147 +275,437 @@ const LilyFlower = () => {
             >
                 {/* SVG Hoa Ly */}
                 <svg
-                    width="280"
-                    height="350"
-                    viewBox="-40 -70 280 350"
+                    width="320"
+                    height="400"
+                    viewBox="-60 -100 320 400"
                     className="drop-shadow-2xl overflow-visible"
                 >
-                    {/* Thân hoa */}
+                    {/* Định nghĩa gradients */}
+                    <defs>
+                        {/* Gradient cho cánh hoa */}
+                        <linearGradient id="petalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor={bloomProgress < 50 ? "#98FB98" : "#FFB6C1"} />
+                            <stop offset="50%" stopColor={bloomProgress < 50 ? "#90EE90" : "#FF69B4"} />
+                            <stop offset="100%" stopColor={bloomProgress < 50 ? "#228B22" : "#DB7093"} />
+                        </linearGradient>
+
+                        <linearGradient id="petalGradient2" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor={bloomProgress < 50 ? "#7CFC00" : "#FFD1DC"} />
+                            <stop offset="50%" stopColor={bloomProgress < 50 ? "#ADFF2F" : "#FFC0CB"} />
+                            <stop offset="100%" stopColor={bloomProgress < 50 ? "#98FB98" : "#FF91A4"} />
+                        </linearGradient>
+
+                        <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stopColor="#FFD700" stopOpacity="1" />
+                            <stop offset="70%" stopColor="#FFA500" stopOpacity="0.8" />
+                            <stop offset="100%" stopColor="#FF8C00" stopOpacity="0.3" />
+                        </radialGradient>
+
+                        <linearGradient id="stemGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#228B22" />
+                            <stop offset="50%" stopColor="#32CD32" />
+                            <stop offset="100%" stopColor="#228B22" />
+                        </linearGradient>
+
+                        <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#32CD32" />
+                            <stop offset="50%" stopColor="#7CFC00" />
+                            <stop offset="100%" stopColor="#228B22" />
+                        </linearGradient>
+
+                        {/* Filter cho hiệu ứng glow */}
+                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                            <feMerge>
+                                <feMergeNode in="coloredBlur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+
+                        <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                            <feMerge>
+                                <feMergeNode in="coloredBlur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    {/* Hiệu ứng hào quang xung quanh hoa */}
+                    {bloomProgress > 60 && (
+                        <motion.ellipse
+                            cx="100"
+                            cy="80"
+                            rx={80 + bloomProgress * 0.5}
+                            ry={100 + bloomProgress * 0.5}
+                            fill="none"
+                            stroke="url(#petalGradient)"
+                            strokeWidth="2"
+                            strokeOpacity="0.3"
+                            filter="url(#softGlow)"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0.2, 0.5, 0.2] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        />
+                    )}
+
+                    {/* Thân hoa với gradient */}
                     <motion.path
-                        d="M100 280 Q95 220 100 160"
+                        d="M100 300 Q92 240 98 180 Q102 160 100 150"
                         fill="none"
-                        stroke="#228B22"
-                        strokeWidth="8"
+                        stroke="url(#stemGradient)"
+                        strokeWidth="10"
                         strokeLinecap="round"
                         initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 1 }}
+                        animate={{
+                            pathLength: 1,
+                            d: windEffect > 0
+                                ? ["M100 300 Q92 240 98 180 Q102 160 100 150",
+                                    "M100 300 Q95 240 102 180 Q106 160 104 150",
+                                    "M100 300 Q89 240 95 180 Q99 160 97 150",
+                                    "M100 300 Q92 240 98 180 Q102 160 100 150"]
+                                : "M100 300 Q92 240 98 180 Q102 160 100 150"
+                        }}
+                        transition={{
+                            pathLength: { duration: 1.2 },
+                            d: { duration: 0.6, ease: "easeInOut" }
+                        }}
                     />
 
-                    {/* Lá trái */}
-                    <motion.path
-                        d="M100 240 Q60 230 50 200 Q70 210 100 220"
-                        fill="#32CD32"
+                    {/* Lá trái với chi tiết */}
+                    <motion.g
                         initial={{ scale: 0, originX: 1, originY: 1 }}
                         animate={{ scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.5 }}
-                    />
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                    >
+                        <path
+                            d="M98 260 Q50 250 30 210 Q35 205 45 200 Q65 230 98 245 Z"
+                            fill="url(#leafGradient)"
+                        />
+                        {/* Gân lá */}
+                        <path
+                            d="M95 255 Q60 235 40 210"
+                            fill="none"
+                            stroke="#228B22"
+                            strokeWidth="1.5"
+                            strokeOpacity="0.6"
+                        />
+                    </motion.g>
 
-                    {/* Lá phải */}
-                    <motion.path
-                        d="M100 220 Q140 210 150 180 Q130 190 100 200"
-                        fill="#32CD32"
+                    {/* Lá phải với chi tiết */}
+                    <motion.g
                         initial={{ scale: 0, originX: 0, originY: 1 }}
                         animate={{ scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.7 }}
+                        transition={{ duration: 0.6, delay: 0.7 }}
+                    >
+                        <path
+                            d="M102 235 Q150 225 170 185 Q165 180 155 175 Q135 205 102 220 Z"
+                            fill="url(#leafGradient)"
+                        />
+                        {/* Gân lá */}
+                        <path
+                            d="M105 230 Q140 210 160 185"
+                            fill="none"
+                            stroke="#228B22"
+                            strokeWidth="1.5"
+                            strokeOpacity="0.6"
+                        />
+                    </motion.g>
+
+                    {/* Lá nhỏ thêm */}
+                    <motion.path
+                        d="M100 280 Q75 275 65 260 Q80 265 100 270"
+                        fill="#32CD32"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.4, delay: 0.9 }}
                     />
 
                     {/* Cánh hoa - với animation nở dần */}
-                    <g>
-                        {/* Cánh sau (nền) */}
+                    <g filter={bloomProgress > 70 ? "url(#glow)" : undefined}>
+                        {/* Cánh sau xa nhất - trái */}
                         <motion.ellipse
-                            cx="100"
-                            cy="80"
+                            cx={100 - 25 - bloomProgress * 0.15}
+                            cy={80 - bloomProgress * 0.2}
+                            rx={18 + bloomProgress * 0.12}
+                            ry={45 + bloomProgress * 0.35}
                             fill={flowerColor.secondary}
-                            initial={{ rx: 15, ry: 30 }}
+                            opacity="0.8"
+                            initial={{ scale: 0.3, rotate: -20 }}
                             animate={{
-                                rx: 20 + bloomProgress * 0.3,
-                                ry: 40 + bloomProgress * 0.5,
-                                rotate: -15
+                                scale: 1,
+                                rotate: windEffect > 0
+                                    ? [-25 - bloomProgress * 0.15, -20 - bloomProgress * 0.15, -28 - bloomProgress * 0.15, -25 - bloomProgress * 0.15]
+                                    : -25 - bloomProgress * 0.15
                             }}
-                            style={{ transformOrigin: "100px 120px" }}
+                            style={{ transformOrigin: "100px 140px" }}
+                            transition={{
+                                duration: windEffect > 0 ? 0.6 : 0.8,
+                                delay: windEffect > 0 ? 0 : 0.3,
+                                ease: "easeInOut"
+                            }}
                         />
+
+                        {/* Cánh sau xa nhất - phải */}
                         <motion.ellipse
-                            cx="100"
-                            cy="80"
+                            cx={100 + 25 + bloomProgress * 0.15}
+                            cy={80 - bloomProgress * 0.2}
+                            rx={18 + bloomProgress * 0.12}
+                            ry={45 + bloomProgress * 0.35}
                             fill={flowerColor.secondary}
-                            initial={{ rx: 15, ry: 30 }}
+                            opacity="0.8"
+                            initial={{ scale: 0.3, rotate: 20 }}
                             animate={{
-                                rx: 20 + bloomProgress * 0.3,
-                                ry: 40 + bloomProgress * 0.5,
-                                rotate: 15
+                                scale: 1,
+                                rotate: windEffect > 0
+                                    ? [25 + bloomProgress * 0.15, 30 + bloomProgress * 0.15, 22 + bloomProgress * 0.15, 25 + bloomProgress * 0.15]
+                                    : 25 + bloomProgress * 0.15
                             }}
-                            style={{ transformOrigin: "100px 120px" }}
+                            style={{ transformOrigin: "100px 140px" }}
+                            transition={{
+                                duration: windEffect > 0 ? 0.6 : 0.8,
+                                delay: windEffect > 0 ? 0.05 : 0.35,
+                                ease: "easeInOut"
+                            }}
                         />
 
-                        {/* Cánh trái */}
+                        {/* Cánh giữa - trái */}
                         <motion.ellipse
-                            cx="70"
-                            cy="90"
-                            fill={flowerColor.primary}
-                            initial={{ rx: 20, ry: 35, rotate: -30 }}
+                            cx={100 - 18 - bloomProgress * 0.2}
+                            cy={75 - bloomProgress * 0.15}
+                            rx={20 + bloomProgress * 0.15}
+                            ry={50 + bloomProgress * 0.4}
+                            fill="url(#petalGradient)"
+                            initial={{ scale: 0.3, rotate: -12 }}
                             animate={{
-                                rx: 25 + bloomProgress * 0.35,
-                                ry: 45 + bloomProgress * 0.6,
-                                rotate: -30 - bloomProgress * 0.3,
-                                x: -bloomProgress * 0.15
+                                scale: 1,
+                                rotate: windEffect > 0
+                                    ? [-15 - bloomProgress * 0.1, -10 - bloomProgress * 0.1, -18 - bloomProgress * 0.1, -15 - bloomProgress * 0.1]
+                                    : -15 - bloomProgress * 0.1
                             }}
-                            style={{ transformOrigin: "100px 120px" }}
+                            style={{ transformOrigin: "100px 140px" }}
+                            transition={{
+                                duration: windEffect > 0 ? 0.6 : 0.8,
+                                delay: windEffect > 0 ? 0.1 : 0.4,
+                                ease: "easeInOut"
+                            }}
                         />
 
-                        {/* Cánh phải */}
+                        {/* Cánh giữa - phải */}
                         <motion.ellipse
-                            cx="130"
-                            cy="90"
-                            fill={flowerColor.primary}
-                            initial={{ rx: 20, ry: 35, rotate: 30 }}
+                            cx={100 + 18 + bloomProgress * 0.2}
+                            cy={75 - bloomProgress * 0.15}
+                            rx={20 + bloomProgress * 0.15}
+                            ry={50 + bloomProgress * 0.4}
+                            fill="url(#petalGradient)"
+                            initial={{ scale: 0.3, rotate: 12 }}
                             animate={{
-                                rx: 25 + bloomProgress * 0.35,
-                                ry: 45 + bloomProgress * 0.6,
-                                rotate: 30 + bloomProgress * 0.3,
-                                x: bloomProgress * 0.15
+                                scale: 1,
+                                rotate: windEffect > 0
+                                    ? [15 + bloomProgress * 0.1, 20 + bloomProgress * 0.1, 12 + bloomProgress * 0.1, 15 + bloomProgress * 0.1]
+                                    : 15 + bloomProgress * 0.1
                             }}
-                            style={{ transformOrigin: "100px 120px" }}
+                            style={{ transformOrigin: "100px 140px" }}
+                            transition={{
+                                duration: windEffect > 0 ? 0.6 : 0.8,
+                                delay: windEffect > 0 ? 0.15 : 0.45,
+                                ease: "easeInOut"
+                            }}
                         />
 
-                        {/* Cánh giữa (trước) */}
+                        {/* Cánh trước chính giữa */}
                         <motion.ellipse
-                            cx="100"
-                            cy="70"
-                            fill={flowerColor.primary}
-                            initial={{ rx: 18, ry: 40 }}
+                            cx={100}
+                            cy={65 - bloomProgress * 0.25}
+                            rx={22 + bloomProgress * 0.18}
+                            ry={55 + bloomProgress * 0.45}
+                            fill="url(#petalGradient2)"
+                            filter="drop-shadow(0 4px 8px rgba(0,0,0,0.15))"
+                            initial={{ scale: 0.3 }}
                             animate={{
-                                rx: 22 + bloomProgress * 0.25,
-                                ry: 50 + bloomProgress * 0.6,
-                                y: -bloomProgress * 0.1
+                                scale: 1,
+                                rotate: windEffect > 0 ? [0, 3, -2, 0] : 0
                             }}
-                            filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
+                            style={{ transformOrigin: "100px 140px" }}
+                            transition={{
+                                duration: windEffect > 0 ? 0.6 : 0.8,
+                                delay: windEffect > 0 ? 0.08 : 0.5,
+                                ease: "easeInOut"
+                            }}
                         />
 
-                        {/* Nhụy hoa */}
+                        {/* Đường vân cánh hoa giữa */}
+                        {bloomProgress > 30 && (
+                            <g opacity="0.25">
+                                <motion.path
+                                    d={`M100 130 Q98 90 96 ${40 - bloomProgress * 0.3}`}
+                                    fill="none"
+                                    stroke={bloomProgress < 50 ? "#228B22" : "#DB7093"}
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    initial={{ pathLength: 0 }}
+                                    animate={{ pathLength: 1 }}
+                                    transition={{ duration: 1, delay: 0.8 }}
+                                />
+                                <motion.path
+                                    d={`M100 130 Q102 90 104 ${40 - bloomProgress * 0.3}`}
+                                    fill="none"
+                                    stroke={bloomProgress < 50 ? "#228B22" : "#DB7093"}
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    initial={{ pathLength: 0 }}
+                                    animate={{ pathLength: 1 }}
+                                    transition={{ duration: 1, delay: 0.9 }}
+                                />
+                                {/* Vân phụ */}
+                                <motion.path
+                                    d={`M100 125 Q90 95 ${85 - bloomProgress * 0.1} ${50 - bloomProgress * 0.2}`}
+                                    fill="none"
+                                    stroke={bloomProgress < 50 ? "#228B22" : "#DB7093"}
+                                    strokeWidth="1"
+                                    strokeLinecap="round"
+                                    initial={{ pathLength: 0 }}
+                                    animate={{ pathLength: 1 }}
+                                    transition={{ duration: 1, delay: 1 }}
+                                />
+                                <motion.path
+                                    d={`M100 125 Q110 95 ${115 + bloomProgress * 0.1} ${50 - bloomProgress * 0.2}`}
+                                    fill="none"
+                                    stroke={bloomProgress < 50 ? "#228B22" : "#DB7093"}
+                                    strokeWidth="1"
+                                    strokeLinecap="round"
+                                    initial={{ pathLength: 0 }}
+                                    animate={{ pathLength: 1 }}
+                                    transition={{ duration: 1, delay: 1.1 }}
+                                />
+                            </g>
+                        )}
+
+                        {/* Nhụy hoa đẹp hơn */}
                         <motion.g
                             initial={{ opacity: 0, scale: 0 }}
                             animate={{
-                                opacity: bloomProgress > 30 ? 1 : 0,
-                                scale: bloomProgress > 30 ? bloomProgress / 100 : 0
+                                opacity: bloomProgress > 25 ? 1 : 0,
+                                scale: bloomProgress > 25 ? 0.8 + (bloomProgress / 200) : 0
                             }}
+                            transition={{ duration: 0.5 }}
                         >
-                            <ellipse cx="100" cy="100" rx="8" ry="6" fill="#FFD700" />
-                            <circle cx="95" cy="98" r="2" fill="#FFA500" />
-                            <circle cx="105" cy="98" r="2" fill="#FFA500" />
-                            <circle cx="100" cy="103" r="2" fill="#FFA500" />
+                            {/* Đế nhụy */}
+                            <ellipse cx="100" cy="130" rx="15" ry="10" fill="url(#centerGlow)" />
+
+                            {/* Các nhụy */}
+                            {[...Array(6)].map((_, i) => (
+                                <g key={i}>
+                                    <motion.line
+                                        x1="100"
+                                        y1="125"
+                                        x2={100 + Math.cos((i * 60 - 90) * Math.PI / 180) * (20 + bloomProgress * 0.15)}
+                                        y2={125 + Math.sin((i * 60 - 90) * Math.PI / 180) * (25 + bloomProgress * 0.2)}
+                                        stroke="#90EE90"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        initial={{ pathLength: 0 }}
+                                        animate={{ pathLength: 1 }}
+                                        transition={{ duration: 0.5, delay: 1 + i * 0.1 }}
+                                    />
+                                    <motion.circle
+                                        cx={100 + Math.cos((i * 60 - 90) * Math.PI / 180) * (20 + bloomProgress * 0.15)}
+                                        cy={125 + Math.sin((i * 60 - 90) * Math.PI / 180) * (25 + bloomProgress * 0.2)}
+                                        r="4"
+                                        fill="#FFD700"
+                                        initial={{ scale: 0 }}
+                                        animate={{
+                                            scale: [1, 1.2, 1],
+                                        }}
+                                        transition={{
+                                            duration: 1.5,
+                                            repeat: Infinity,
+                                            delay: i * 0.2
+                                        }}
+                                    />
+                                </g>
+                            ))}
+
+                            {/* Nhụy trung tâm */}
+                            <motion.circle
+                                cx="100"
+                                cy="120"
+                                r="6"
+                                fill="#FFD700"
+                                animate={{
+                                    filter: ["drop-shadow(0 0 3px #FFD700)", "drop-shadow(0 0 8px #FFD700)", "drop-shadow(0 0 3px #FFD700)"]
+                                }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            />
                         </motion.g>
                     </g>
 
                     {/* Hiệu ứng lấp lánh khi nở */}
-                    {bloomProgress > 50 && (
+                    {bloomProgress > 40 && (
                         <g>
-                            {[...Array(5)].map((_, i) => (
+                            {[...Array(8)].map((_, i) => (
+                                <motion.g key={i}>
+                                    <motion.circle
+                                        cx={50 + Math.random() * 100}
+                                        cy={20 + Math.random() * 80}
+                                        r="2"
+                                        fill="white"
+                                        initial={{ opacity: 0, scale: 0 }}
+                                        animate={{
+                                            opacity: [0, 1, 0],
+                                            scale: [0, 1.5, 0]
+                                        }}
+                                        transition={{
+                                            duration: 2,
+                                            repeat: Infinity,
+                                            delay: i * 0.25
+                                        }}
+                                    />
+                                    {/* Tia sáng */}
+                                    <motion.path
+                                        d={`M${55 + i * 12} ${30 + (i % 3) * 25} l3 -3 l-3 -3 l-3 3 z`}
+                                        fill={bloomProgress < 50 ? "#ADFF2F" : "#FFB6C1"}
+                                        initial={{ opacity: 0, scale: 0, rotate: 0 }}
+                                        animate={{
+                                            opacity: [0, 0.8, 0],
+                                            scale: [0, 1, 0],
+                                            rotate: [0, 180, 360]
+                                        }}
+                                        transition={{
+                                            duration: 2.5,
+                                            repeat: Infinity,
+                                            delay: i * 0.3
+                                        }}
+                                    />
+                                </motion.g>
+                            ))}
+                        </g>
+                    )}
+
+                    {/* Hạt phấn bay */}
+                    {bloomProgress > 70 && (
+                        <g>
+                            {[...Array(6)].map((_, i) => (
                                 <motion.circle
-                                    key={i}
-                                    cx={60 + i * 20}
-                                    cy={50 + (i % 2) * 30}
-                                    r="3"
-                                    fill="white"
-                                    initial={{ opacity: 0, scale: 0 }}
+                                    key={`pollen-${i}`}
+                                    r="2"
+                                    fill="#FFD700"
+                                    initial={{
+                                        cx: 100,
+                                        cy: 120,
+                                        opacity: 0
+                                    }}
                                     animate={{
+                                        cx: [100, 100 + (Math.random() - 0.5) * 80],
+                                        cy: [120, 120 - 50 - Math.random() * 30],
                                         opacity: [0, 1, 0],
-                                        scale: [0, 1, 0]
+                                        scale: [0.5, 1, 0.3]
                                     }}
                                     transition={{
-                                        duration: 1.5,
+                                        duration: 3,
                                         repeat: Infinity,
-                                        delay: i * 0.3
+                                        delay: i * 0.5,
+                                        ease: "easeOut"
                                     }}
                                 />
                             ))}

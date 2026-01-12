@@ -1,9 +1,6 @@
-// App.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ImpactChart from "./components/ImpactChart";
-import ArtGenerator from "./components/ArtGenerator";
-import CodeRain from "./components/CodeRain";
 import LilyFlower from "./components/LilyFlower";
 
 // Image Gallery Component
@@ -223,9 +220,200 @@ const ScrollHint = ({ nextSection, dark = false }) => (
   </motion.div>
 );
 
+// Mini Navigation Component
+const MiniNav = () => {
+  const [activeSection, setActiveSection] = useState(0);
+
+  const sections = [
+    { id: 'intro', label: 'Giới thiệu', number: '01' },
+    { id: 'connector', label: 'The Connector', number: '02' },
+    { id: 'realization', label: 'The Realization', number: '03' },
+    { id: 'gallery', label: 'Living Gallery', number: '04' },
+    { id: 'vinuni', label: 'Why VinUni?', number: '05' },
+    { id: 'contact', label: 'Liên hệ', number: '06' },
+  ];
+
+  // Track which section is in view
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px', // Trigger when section is in middle of viewport
+      threshold: 0
+    };
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = sections.findIndex(s => s.id === entry.target.id);
+          if (index !== -1) {
+            setActiveSection(index);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe all sections
+    sections.forEach((section) => {
+      const element = document.getElementById(section.id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToSection = (index) => {
+    const sectionElements = document.querySelectorAll('section');
+    if (sectionElements[index]) {
+      sectionElements[index].scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <motion.nav
+      className="fixed top-6 left-6 z-50 hidden md:block"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.5, duration: 0.6 }}
+    >
+      <div className="flex flex-col gap-1">
+        {sections.map((section, index) => {
+          const isActive = activeSection === index;
+
+          return (
+            <motion.button
+              key={section.id}
+              onClick={() => scrollToSection(index)}
+              className={`group flex items-center gap-3 text-left py-1.5 px-2 rounded-lg transition-all duration-300 ${isActive ? 'bg-charcoal/5' : 'hover:bg-charcoal/5'
+                }`}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: isActive ? 4 : 0 }}
+              transition={{ delay: 0.6 + index * 0.1 }}
+              whileHover={{ x: 4 }}
+            >
+              {/* Number */}
+              <span className={`text-[10px] font-mono transition-colors w-4 ${isActive ? 'text-pastel-pink' : 'text-gray-300 group-hover:text-pastel-pink'
+                }`}>
+                {section.number}
+              </span>
+
+              {/* Dot indicator */}
+              <motion.span
+                className={`rounded-full transition-all duration-300 ${isActive
+                  ? 'w-2 h-2 bg-pastel-pink'
+                  : 'w-1.5 h-1.5 bg-gray-300 group-hover:bg-pastel-pink group-hover:scale-125'
+                  }`}
+                animate={isActive ? { scale: [1, 1.2, 1] } : {}}
+                transition={{ duration: 1.5, repeat: isActive ? Infinity : 0 }}
+              />
+
+              {/* Label - visible when active or on hover */}
+              <motion.span
+                className={`text-xs whitespace-nowrap transition-all duration-300 ${isActive
+                  ? 'text-charcoal opacity-100 translate-x-0'
+                  : 'text-gray-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0'
+                  }`}
+              >
+                {section.label}
+              </motion.span>
+
+              {/* Active indicator line */}
+              {isActive && (
+                <motion.div
+                  className="absolute left-0 w-0.5 h-4 bg-pastel-pink rounded-full"
+                  layoutId="activeIndicator"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </motion.button>
+          );
+        })}
+      </div>
+
+      {/* Decorative line */}
+      <motion.div
+        className="absolute left-[26px] top-0 w-[1px] h-full bg-gradient-to-b from-transparent via-gray-200 to-transparent -z-10"
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 1 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+      />
+    </motion.nav>
+  );
+};
+
+// Rain Effect Component
+const RainEffect = () => {
+  const raindrops = Array.from({ length: 80 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    delay: Math.random() * 3,
+    duration: 1 + Math.random() * 1.5,
+    opacity: 0.2 + Math.random() * 0.4,
+    size: Math.random() > 0.7 ? 'large' : 'small'
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {raindrops.map((drop) => (
+        <motion.div
+          key={drop.id}
+          className="absolute top-0"
+          style={{ left: drop.left }}
+          initial={{ y: -20, opacity: 0 }}
+          animate={{
+            y: '100vh',
+            opacity: [0, drop.opacity, drop.opacity, 0]
+          }}
+          transition={{
+            duration: drop.duration,
+            repeat: Infinity,
+            delay: drop.delay,
+            ease: 'linear'
+          }}
+        >
+          {/* Raindrop */}
+          <div
+            className={`rounded-full bg-gradient-to-b from-blue-300/60 to-transparent ${drop.size === 'large' ? 'w-0.5 h-8' : 'w-[1px] h-4'
+              }`}
+            style={{ opacity: drop.opacity }}
+          />
+        </motion.div>
+      ))}
+
+      {/* Water ripples at bottom */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={`ripple-${i}`}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 border border-blue-400/20 rounded-full"
+          style={{
+            left: `${10 + i * 12}%`,
+          }}
+          initial={{ width: 0, height: 0, opacity: 0.5 }}
+          animate={{
+            width: [0, 40, 80],
+            height: [0, 20, 40],
+            opacity: [0.4, 0.2, 0]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: i * 0.4,
+            ease: 'easeOut'
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 // Section component với scroll snap
-const Section = ({ children, className }) => (
-  <section className={`min-h-screen w-full snap-start flex flex-col items-center justify-center p-8 relative overflow-hidden ${className}`}>
+const Section = ({ children, className, id }) => (
+  <section id={id} className={`min-h-screen w-full snap-start flex flex-col items-center justify-center p-8 relative overflow-hidden ${className}`}>
     {children}
   </section>
 );
@@ -282,8 +470,11 @@ function App() {
   return (
     <div className="bg-creamy-white text-charcoal h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar selection:bg-pastel-pink">
 
+      {/* Mini Navigation */}
+      <MiniNav />
+
       {/* --- GIAI ĐOẠN 1: GIỚI THIỆU BẢN THÂN --- */}
-      <Section className="bg-creamy-white">
+      <Section id="intro" className="bg-creamy-white">
         <motion.div
           className="max-w-4xl grid md:grid-cols-2 gap-10 items-center"
           variants={containerVariants}
@@ -348,7 +539,7 @@ function App() {
       </Section>
 
       {/* --- GIAI ĐOẠN 2: THE CONNECTOR --- */}
-      <Section className="bg-white">
+      <Section id="connector" className="bg-white">
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <svg width="100%" height="100%">
             <line x1="10%" y1="10%" x2="90%" y2="90%" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
@@ -412,17 +603,28 @@ function App() {
       </Section>
 
       {/* --- GIAI ĐOẠN 3: THE REALIZATION --- */}
-      <Section className="bg-gradient-to-br from-charcoal via-gray-800 to-charcoal relative">
+      <Section id="realization" className="bg-gradient-to-br from-charcoal via-gray-800 to-charcoal relative">
+        {/* Rain Effect */}
+        <RainEffect />
+
         {/* Decorative background elements */}
         <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
           <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-pastel-pink/20 blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-periwinkle/20 blur-3xl"></div>
-          <svg className="absolute inset-0 w-full h-full">
-            <pattern id="rain-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-              <line x1="20" y1="0" x2="20" y2="20" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-            </pattern>
-            <rect x="0" y="0" width="100%" height="100%" fill="url(#rain-pattern)" />
-          </svg>
+
+          {/* Storm clouds effect */}
+          <motion.div
+            className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-900/50 to-transparent"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* Lightning flash effect - subtle */}
+          <motion.div
+            className="absolute inset-0 bg-white/5"
+            animate={{ opacity: [0, 0, 0, 0.1, 0, 0.05, 0, 0, 0, 0, 0, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          />
         </div>
 
         <motion.div
@@ -541,7 +743,7 @@ function App() {
       </Section>
 
       {/* --- GIAI ĐOẠN 4: THE VISIONARY --- */}
-      <Section className="bg-creamy-white">
+      <Section id="gallery" className="bg-creamy-white">
         <motion.div
           className="max-w-6xl w-full grid md:grid-cols-2 gap-12 items-center"
           variants={containerVariants}
@@ -659,7 +861,7 @@ function App() {
       --- */
       }
       {/* --- GIAI ĐOẠN 6: WHY VINUNI? --- */}
-      < Section className="bg-gradient-to-br from-[#1a365d] via-[#2c5282] to-[#2b6cb0] text-white relative overflow-hidden">
+      <Section id="vinuni" className="bg-gradient-to-br from-[#1a365d] via-[#2c5282] to-[#2b6cb0] text-white relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white rounded-full"></div>
@@ -686,7 +888,7 @@ function App() {
               className="text-4xl md:text-6xl font-bold mb-4"
               variants={scaleUp}
             >
-              Why <span className="text-amber-400">VinUni</span>?
+              Why I think <span className="text-amber-400">VinUni</span> is the best ?
             </motion.h2>
           </motion.div>
 
@@ -782,7 +984,7 @@ function App() {
       </Section>
 
       {/* --- FOOTER: CONTACT & CTA --- */}
-      <Section className="bg-charcoal text-creamy-white min-h-[80vh]">
+      <Section id="contact" className="bg-charcoal text-creamy-white min-h-[80vh]">
         <motion.div
           className="max-w-4xl w-full text-center"
           variants={containerVariants}
