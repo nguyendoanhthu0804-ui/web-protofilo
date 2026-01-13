@@ -4,51 +4,51 @@ import { motion, AnimatePresence } from "framer-motion";
 // Các items có thể kéo thả
 const draggableItems = [
     {
-        id: "lightstick",
-        name: "Lightstick",
+        id: "memory",
+        name: "Memory",
         emoji: "🎤",
         color: "#FFD700",
-        description: "Ánh sáng từ fandom",
+        description: "Những kỷ niệm đáng nhớ",
         position: { top: "10%", left: "5%" }
     },
     {
         id: "connection",
-        name: "Kết nối",
+        name: "Connection",
         emoji: "🤝",
         color: "#4ECDC4",
-        description: "Sức mạnh cộng đồng",
+        description: "Sức mạnh kết nối",
         position: { top: "50%", left: "0%" }
     },
     {
-        id: "children",
-        name: "Thiện nguyện",
-        emoji: "👧",
-        color: "#FF6B9D",
-        description: "Yêu thương lan tỏa",
+        id: "love",
+        name: "Love",
+        emoji: "🍋",
+        color: "#FFEB3B",
+        description: "Tình yêu ngọt ngào",
         position: { bottom: "15%", left: "5%" }
     },
     {
-        id: "data",
-        name: "Data",
-        emoji: "📊",
-        color: "#7C83FD",
-        description: "Sức mạnh dữ liệu",
+        id: "challenge",
+        name: "Challenge",
+        emoji: "💰",
+        color: "#4CAF50",
+        description: "Thử thách và cơ hội",
         position: { top: "10%", right: "5%" }
     },
     {
-        id: "art",
-        name: "Nghệ thuật",
-        emoji: "🎨",
-        color: "#F7A072",
-        description: "Sáng tạo không giới hạn",
+        id: "lesson",
+        name: "Lesson",
+        emoji: "📊",
+        color: "#7C83FD",
+        description: "Bài học từ dữ liệu",
         position: { top: "50%", right: "0%" }
     },
     {
-        id: "heart",
-        name: "Trái tim",
-        emoji: "💖",
-        color: "#FF69B4",
-        description: "Tình yêu thương",
+        id: "interest",
+        name: "Interest",
+        emoji: "🎨",
+        color: "#F7A072",
+        description: "Đam mê sáng tạo",
         position: { bottom: "15%", right: "5%" }
     }
 ];

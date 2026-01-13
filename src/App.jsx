@@ -3,87 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ImpactChart from "./components/ImpactChart";
 import LilyFlower from "./components/LilyFlower";
 
-// Floating Photo Collage Component - Optimized
-const FloatingPhotoCollage = () => {
-  const photos = [
-    { id: 1, src: "/images/cjc1.jpg", size: "w-32 h-40", position: "top-[5%] left-[2%]", rotate: -8, floatDuration: 4 },
-    { id: 2, src: "/images/cjc7.jpg", size: "w-28 h-36", position: "top-[3%] left-[20%]", rotate: 6, floatDuration: 4.5 },
-    { id: 3, src: "/images/DSC_1241.jpeg", size: "w-36 h-44", position: "top-[8%] right-[3%]", rotate: 10, floatDuration: 5 },
-    { id: 4, src: "/images/ente1.jpg", size: "w-28 h-36", position: "top-[4%] right-[22%]", rotate: -6, floatDuration: 4.2 },
-    { id: 5, src: "/images/ente2.jpg", size: "w-28 h-36", position: "top-[32%] left-[1%]", rotate: -12, floatDuration: 4.8 },
-    { id: 6, src: "/images/ente3.jpg", size: "w-32 h-40", position: "top-[55%] left-[2%]", rotate: 8, floatDuration: 4.3 },
-    { id: 7, src: "/images/ente4.jpg", size: "w-28 h-36", position: "top-[35%] right-[1%]", rotate: -8, floatDuration: 4.6 },
-    { id: 8, src: "/images/ente5.jpg", size: "w-32 h-40", position: "top-[58%] right-[1%]", rotate: 12, floatDuration: 5.2 },
-    { id: 9, src: "/images/IMG_5201.JPG", size: "w-28 h-36", position: "bottom-[15%] left-[3%]", rotate: 5, floatDuration: 4.4 },
-    { id: 10, src: "/images/sap1.jpg", size: "w-28 h-36", position: "bottom-[5%] left-[20%]", rotate: -10, floatDuration: 4.7 },
-    { id: 11, src: "/images/sap2.jpg", size: "w-32 h-40", position: "bottom-[18%] right-[4%]", rotate: -5, floatDuration: 4.1 },
-    { id: 12, src: "/images/sap3.jpg", size: "w-28 h-36", position: "bottom-[4%] right-[20%]", rotate: 8, floatDuration: 4.9 },
-    { id: 13, src: "/images/sap4.jpg", size: "w-26 h-32", position: "top-[20%] left-[6%]", rotate: 14, floatDuration: 5.1 },
-    { id: 14, src: "/images/yosci1.jpg", size: "w-26 h-32", position: "bottom-[32%] right-[2%]", rotate: -14, floatDuration: 4.5 },
-  ];
 
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 hidden md:block">
-      {photos.map((photo, index) => (
-        <div
-          key={photo.id}
-          className={`absolute ${photo.position} ${photo.size} pointer-events-auto cursor-pointer transform hover:scale-125 hover:rotate-0 hover:z-50 transition-all duration-300 will-change-transform`}
-          style={{
-            transform: `rotate(${photo.rotate}deg)`,
-            animation: `float${index % 3} ${photo.floatDuration}s ease-in-out infinite`,
-            animationDelay: `${index * 0.2}s`
-          }}
-        >
-          {/* Polaroid-style frame */}
-          <div className="relative bg-white p-1.5 pb-5 rounded-sm shadow-md hover:shadow-xl hover:shadow-pastel-pink/20 transition-shadow duration-300 h-full">
-            {/* Photo */}
-            <div className="w-full h-[calc(100%-1rem)] overflow-hidden rounded-[2px] bg-gradient-to-br from-pastel-pink/20 to-periwinkle/20">
-              <img
-                src={photo.src}
-                alt={`Hoạt động ${photo.id}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'flex';
-                }}
-              />
-              {/* Fallback placeholder */}
-              <div className="w-full h-full bg-gradient-to-br from-pastel-pink/30 via-periwinkle/20 to-warm-yellow/30 items-center justify-center text-3xl hidden">
-                {['🎨', '🤝', '💡', '❤️', '🌟', '📸', '🎓', '✨', '🌸', '💫', '🎭', '🌈', '🦋', '🌺'][photo.id - 1]}
-              </div>
-            </div>
-
-            {/* Tape decoration */}
-            <div
-              className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-10 h-3 bg-warm-yellow/70 rounded-sm"
-              style={{ transform: `translateX(-50%) rotate(${photo.id % 2 === 0 ? 3 : -3}deg)` }}
-            />
-
-            {/* Small caption line */}
-            <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-3/4 h-[2px] bg-gray-200 rounded-full" />
-          </div>
-        </div>
-      ))}
-
-      {/* CSS Animations - defined once */}
-      <style>{`
-        @keyframes float0 {
-          0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
-          50% { transform: translateY(-8px) rotate(var(--rotate, 0deg)); }
-        }
-        @keyframes float1 {
-          0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
-          50% { transform: translateY(-6px) rotate(var(--rotate, 0deg)); }
-        }
-        @keyframes float2 {
-          0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
-          50% { transform: translateY(-10px) rotate(var(--rotate, 0deg)); }
-        }
-      `}</style>
-    </div>
-  );
-};
 
 // Image Gallery Component
 const ImageGallery = () => {
@@ -310,7 +230,7 @@ const MiniNav = () => {
     { id: 'intro', label: 'Giới thiệu', icon: '👋', color: '#f9a8d4' },
     { id: 'connector', label: 'The Connector', icon: '🔗', color: '#a5b4fc' },
     { id: 'realization', label: 'The Realization', icon: '💡', color: '#fcd34d' },
-    { id: 'gallery', label: 'Living Gallery', icon: '🎨', color: '#f9a8d4' },
+    { id: 'gallery', label: "The 'Me'", icon: '🎨', color: '#f9a8d4' },
     { id: 'vinuni', label: 'Why VinUni?', icon: '🎓', color: '#60a5fa' },
     { id: 'contact', label: 'Liên hệ', icon: '📧', color: '#a5b4fc' },
   ];
@@ -600,8 +520,19 @@ function App() {
 
       {/* --- GIAI ĐOẠN 1: GIỚI THIỆU BẢN THÂN --- */}
       <Section id="intro" className="bg-creamy-white">
-        {/* Floating Photo Collage Background */}
-        <FloatingPhotoCollage />
+        {/* Background Image từ PDF */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/images/thu_page-0001.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          {/* Optional: Overlay để làm mờ nhẹ background nếu cần */}
+          <div className="absolute inset-0 bg-creamy-white/30" />
+        </div>
 
         <motion.div
           className="max-w-4xl grid md:grid-cols-2 gap-10 items-center relative z-10"
@@ -616,31 +547,31 @@ function App() {
               className="text-5xl font-bold mb-4 text-pastel-pink drop-shadow-md"
               variants={itemVariants}
             >
-              Xin chào! 👋
+              Hello👋
             </motion.h2>
             <motion.h1
               className="text-4xl font-bold mb-6"
               variants={itemVariants}
             >
-              Tôi là <span className="text-periwinkle">Anh Thư</span>
+              I am <span className="text-periwinkle">Anh Thu</span>
             </motion.h1>
             <motion.p
               className="text-lg leading-relaxed mb-4"
               variants={itemVariants}
             >
-              Một người trẻ đam mê <span className="font-semibold text-pastel-pink">Data Science</span> và tin rằng công nghệ có thể tạo ra những thay đổi tích cực cho xã hội.
+              I am a <span className="font-semibold text-pastel-pink">Data Science</span> enthusiast who believes that data, when used thoughtfully, can create meaningful social impact.
             </motion.p>
             <motion.p
               className="text-lg leading-relaxed mb-4"
               variants={itemVariants}
             >
-              Tôi yêu thích việc kết hợp giữa <span className="font-semibold text-periwinkle">nghệ thuật</span> và <span className="font-semibold text-pastel-pink">dữ liệu</span>, biến những con số khô khan thành câu chuyện có ý nghĩa.
+              As someone who also loves <span className="font-semibold text-periwinkle">art</span>, I see <span className="font-semibold text-pastel-pink">data</span> not merely as numbers or code, but as a medium for storytelling – one that reveals the human realities behind patterns and statistics. Art shapes how I observe the world; data helps me understand and improve it.
             </motion.p>
             <motion.p
               className="text-lg leading-relaxed text-gray-600 italic"
               variants={itemVariants}
             >
-              "Hãy cùng tôi khám phá hành trình từ một người quan sát đến một người kiến tạo tác động."
+              This website documents my journey from a quiet observer to an active change-maker, using data as both my language and my tool.
             </motion.p>
 
             {/* Quick Info Tags */}
@@ -648,7 +579,7 @@ function App() {
               className="flex flex-wrap gap-2 mt-6"
               variants={itemVariants}
             >
-              {['🎓 Học sinh', '💻 Data Enthusiast', '🎨 Yêu nghệ thuật', '❤️ Tình nguyện viên'].map((tag, i) => (
+              {['🎓 Change-maker', '💻 Data Enthusiast', '🎨 Art Lover', '❤️ Volunteer'].map((tag, i) => (
                 <span
                   key={i}
                   className="px-3 py-1 bg-gradient-to-r from-pastel-pink/20 to-periwinkle/20 rounded-full text-sm border border-pastel-pink/30"
@@ -691,13 +622,13 @@ function App() {
               The Connector
             </motion.h2>
             <motion.p className="text-lg mb-4" variants={itemVariants}>
-              Dự án Entelier không chỉ là bán tranh. Đó là việc kết nối những trái tim yêu nghệ thuật với những họa sĩ đặc biệt.
+              In my journey, I had the chance to be a part of many meaningful projects. They all shared the same role: a connector, which united people who had a common interest and connected kind-hearted people to the hearts in need of warmth.
             </motion.p>
             <motion.p className="text-lg mb-4" variants={itemVariants}>
-              Tôi nhận ra dữ liệu có thể tối ưu hóa sự kết nối này. Bằng cách phân tích xu hướng, tôi đưa đúng tác phẩm đến đúng người.
+              Data became a powerful tool in this process. By analyzing participation trends, donation behaviors, and potential outcomes, I strengthened collaboration, improved transparency, and attracted sponsors who shared the same vision. Data transformed connection from something emotional into something sustainable.
             </motion.p>
             <motion.p className="text-lg mb-6 text-gray-600 italic" variants={itemVariants}>
-              Từ một dự án nhỏ, Entelier đã kết nối hơn 50 họa sĩ với hàng trăm người yêu nghệ thuật.
+              {/* Từ một dự án nhỏ, Entelier đã kết nối hơn 50 họa sĩ với hàng trăm người yêu nghệ thuật. */}
             </motion.p>
 
             {/* Skills */}
@@ -705,7 +636,7 @@ function App() {
               className="flex gap-2 flex-wrap font-mono text-sm"
               variants={containerVariants}
             >
-              {['Leadership', 'Fundraising', 'Data Analysis', 'Empathy'].map((skill, i) => (
+              {['Leadership', 'Like-minded Peers', 'Data Analysis', 'Warmth'].map((skill, i) => (
                 <motion.span
                   key={skill}
                   className={`px-3 py-1 rounded-full border ${i === 0 ? 'bg-pastel-pink/30 border-pastel-pink' :
@@ -764,12 +695,12 @@ function App() {
         >
           {/* Left content */}
           <motion.div variants={slideFromLeft}>
-            <motion.span
+            {/* <motion.span
               className="inline-block px-4 py-2 bg-pastel-pink/20 backdrop-blur-sm rounded-full text-sm font-mono mb-4 text-pastel-pink border border-pastel-pink/30"
               variants={itemVariants}
             >
               💧 Khoảnh khắc nhận ra
-            </motion.span>
+            </motion.span> */}
             <motion.h2
               className="text-4xl font-bold mb-6 text-creamy-white"
               variants={itemVariants}
@@ -780,15 +711,13 @@ function App() {
               className="text-lg leading-relaxed mb-4 text-gray-300"
               variants={itemVariants}
             >
-              Khi cơn lũ ập đến Huế, tôi nhận ra tiền bạc là chưa đủ.
-              Con số <span className="text-periwinkle font-bold">1600mm</span> không vô tri — nó mang nỗi đau của hàng ngàn gia đình.
+              In October of 2025, when the disastrous flood struck Hue, I realized financial aid alone is not enough. The rainfall reached an unprecedented <span className="text-periwinkle font-bold">1600mm</span> a day, sweeping away people’s possessions, effort, and even their hope.
             </motion.p>
             <motion.p
               className="text-lg leading-relaxed mb-6 text-gray-400"
               variants={itemVariants}
             >
-              Tôi học được rằng Data Science không chỉ là con số và biểu đồ.
-              Đó là công cụ để thấu hiểu, dự đoán và hành động có ý nghĩa.
+              This experience reshaped my perspective. I realized that data could do more than record damage after it happened. It could help anticipate needs, guide resource allocation, and communicate urgency with empathy.
             </motion.p>
 
             {/* Tags */}
@@ -796,7 +725,7 @@ function App() {
               className="flex flex-wrap gap-2"
               variants={itemVariants}
             >
-              {['Empathy', 'Data for Good', 'Social Impact'].map((tag, i) => (
+              {['Empathy', 'Social Impact'].map((tag, i) => (
                 <span
                   key={i}
                   className="px-3 py-1 bg-white/10 rounded-full text-sm text-gray-300 border border-white/20"
@@ -885,17 +814,17 @@ function App() {
               className="text-4xl font-bold mb-4 font-mono text-charcoal"
               variants={itemVariants}
             >
-              <span className="text-pastel-pink">Living</span> Gallery
+              The <span className="text-pastel-pink">"Me"</span>
             </motion.h2>
             <motion.p className="text-lg mb-4" variants={itemVariants}>
-              Ước mơ của tôi là xây dựng một không gian nơi dòng code trở thành mạch dẫn của sự thấu cảm.
+              At the end of the journey, I have grown a lot. With all the friends I have made, the memories I have gained and the experiences I have obtained, I have gradually opened myself up like a blooming lily, each part of my journey has contributed to who I am becoming:
             </motion.p>
-            <motion.p className="text-lg mb-4" variants={itemVariants}>
+            {/* <motion.p className="text-lg mb-4" variants={itemVariants}>
               Hãy thử nhập một cảm xúc của bạn vào bên phải. Công nghệ sẽ biến nó thành nghệ thuật.
             </motion.p>
             <motion.p className="text-lg mb-6 text-gray-600 italic" variants={itemVariants}>
               Data Science không chỉ tối ưu hóa lợi nhuận, mà còn khuếch đại nhân văn.
-            </motion.p>
+            </motion.p> */}
 
             {/* Tech Stack */}
             <motion.div className="mt-8" variants={itemVariants}>
@@ -903,14 +832,14 @@ function App() {
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm font-mono mb-1">
-                    <span>Python / Pandas</span>
-                    <span>90%</span>
+                    <span>Python / Excel</span>
+                    <span>60%</span>
                   </div>
                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-periwinkle"
                       initial={{ width: 0 }}
-                      whileInView={{ width: '90%' }}
+                      whileInView={{ width: '60%' }}
                       viewport={{ once: true }}
                       transition={{ duration: 1, delay: 0.5 }}
                     />
@@ -919,13 +848,13 @@ function App() {
                 <div>
                   <div className="flex justify-between text-sm font-mono mb-1">
                     <span>Data Visualization</span>
-                    <span>75%</span>
+                    <span>80%</span>
                   </div>
                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-pastel-pink"
                       initial={{ width: 0 }}
-                      whileInView={{ width: '75%' }}
+                      whileInView={{ width: '80%' }}
                       viewport={{ once: true }}
                       transition={{ duration: 1, delay: 0.7 }}
                     />
@@ -1006,17 +935,17 @@ function App() {
         >
           {/* Header */}
           <motion.div className="text-center mb-12" variants={itemVariants}>
-            <motion.span
+            {/* <motion.span
               className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-mono mb-4"
               variants={scaleUp}
             >
               🎯 Điểm đến tiếp theo
-            </motion.span>
+            </motion.span> */}
             <motion.h2
               className="text-4xl md:text-6xl font-bold mb-4"
               variants={scaleUp}
             >
-              Why I think <span className="text-amber-400">VinUni</span> is the best ?
+              The Next Destination: <span className="text-amber-400">VinUni</span>
             </motion.h2>
           </motion.div>
 
@@ -1032,10 +961,9 @@ function App() {
               whileHover={{ y: -5, scale: 1.02 }}
             >
               <div className="text-4xl mb-4">🔬</div>
-              <h3 className="text-xl font-bold mb-3 text-amber-300">Research-Driven</h3>
+              <h3 className="text-xl font-bold mb-3 text-amber-300">Opportunities for Improvement</h3>
               <p className="text-gray-200 text-sm leading-relaxed">
-                VinUni không chỉ dạy lý thuyết. Môi trường nghiên cứu tại đây cho phép tôi
-                áp dụng Data Science vào các vấn đề thực tế của Việt Nam ngay từ năm nhất.
+                Through research-oriented initiatives such as <span className="text-amber-400">VinTelligence</span> and interdisciplinary extracurricular activities, I hope to deepen my understanding of applied data science while learning how research can drive real-world solutions.
               </p>
             </motion.div>
 
@@ -1046,10 +974,9 @@ function App() {
               whileHover={{ y: -5, scale: 1.02 }}
             >
               <div className="text-4xl mb-4">🌏</div>
-              <h3 className="text-xl font-bold mb-3 text-amber-300">Global + Local</h3>
+              <h3 className="text-xl font-bold mb-3 text-amber-300">Global Connection</h3>
               <p className="text-gray-200 text-sm leading-relaxed">
-                Chương trình hợp tác với Cornell giúp tôi tiếp cận kiến thức quốc tế,
-                nhưng vẫn giữ gốc rễ để phục vụ cộng đồng Việt Nam.
+                VinUni’s global partnerships align with my aspiration to learn from diverse perspectives and bring those insights back to my community.
               </p>
             </motion.div>
 
@@ -1060,10 +987,9 @@ function App() {
               whileHover={{ y: -5, scale: 1.02 }}
             >
               <div className="text-4xl mb-4">💡</div>
-              <h3 className="text-xl font-bold mb-3 text-amber-300">Innovation Ecosystem</h3>
+              <h3 className="text-xl font-bold mb-3 text-amber-300">Community-oriented Activities</h3>
               <p className="text-gray-200 text-sm leading-relaxed">
-                Hệ sinh thái Vingroup mở ra cơ hội thực tập, khởi nghiệp và biến ý tưởng
-                Data for Good thành sản phẩm thực sự tác động xã hội.
+                Vingroup’s ecosystem offers a rare opportunity to transform data-driven ideas into tangible products that serve society.
               </p>
             </motion.div>
           </motion.div>
@@ -1074,8 +1000,8 @@ function App() {
             variants={scaleUp}
           >
             <p className="text-xl md:text-2xl font-medium italic mb-4">
-              "Tôi muốn trở thành người kết nối giữa <span className="text-amber-400">công nghệ</span> và
-              <span className="text-pink-300"> tình người</span>. VinUni là nơi giúp tôi hiện thực hóa sứ mệnh đó."
+              "I aspire to use <span className="text-amber-400">data</span> and <span className="text-amber-400">technology</span> to foster empathy and create social impact.
+              VinUni is where this aspiration can evolve into action."
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-gray-300">
               <span className="w-8 h-[1px] bg-gray-400"></span>
@@ -1090,10 +1016,9 @@ function App() {
             variants={containerVariants}
           >
             {[
-              { icon: "📊", text: "Data Science for Social Good" },
-              { icon: "🎨", text: "Art + Tech Integration" },
-              { icon: "🤝", text: "Community Impact" },
-              { icon: "🚀", text: "Innovation Leader" }
+              { icon: "📊", text: "Data Science" },
+              { icon: "🤝", text: "Community" },
+              { icon: "🚀", text: "Opportunity" }
             ].map((goal, i) => (
               <motion.div
                 key={i}
