@@ -556,14 +556,14 @@ function App() {
         </div>
 
         <motion.div
-          className="max-w-4xl grid md:grid-cols-2 gap-10 items-center relative z-10"
+          className="max-w-4xl grid md:grid-cols-2 gap-10 items-center relative z-10 mt-16 md:mt-0 px-2"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
           {/* Left content */}
-          <motion.div variants={slideFromLeft}>
+          <motion.div variants={slideFromLeft} className="bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none rounded-2xl p-4 md:p-0">
             <motion.h2
               className="text-5xl font-bold mb-4 text-pastel-pink drop-shadow-md"
               variants={itemVariants}
