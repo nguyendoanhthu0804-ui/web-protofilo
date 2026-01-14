@@ -775,7 +775,7 @@ const LilyFlower = () => {
             {/* Reset button */}
             {collectedItems.length > 0 && (
                 <motion.button
-                    className="absolute bottom-16 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors"
+                    className="absolute bottom-16 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors z-30"
                     onClick={handleReset}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
