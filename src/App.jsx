@@ -565,7 +565,7 @@ function App() {
           {/* Left content */}
           <motion.div variants={slideFromLeft} className="bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none rounded-2xl p-4 md:p-0">
             <motion.h2
-              className="text-5xl font-bold mb-4 text-pastel-pink drop-shadow-md"
+              className="text-5xl font-bold mb-4 text-rose-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
               variants={itemVariants}
             >
               Hello👋
@@ -574,7 +574,7 @@ function App() {
               className="text-4xl font-bold mb-6"
               variants={itemVariants}
             >
-              I am <span className="text-periwinkle">Anh Thu</span>
+              I am <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-rose-500 to-violet-600 font-extrabold" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>Anh Thu</span>
             </motion.h1>
             <motion.p
               className="text-lg leading-relaxed mb-4"
@@ -600,13 +600,20 @@ function App() {
               className="flex flex-wrap gap-2 mt-6"
               variants={itemVariants}
             >
-              {['🎓 Change-maker', '💻 Data Enthusiast', '🎨 Art Lover', '❤️ Volunteer'].map((tag, i) => (
-                <span
+              {[
+                { text: '🎓 Change-maker', bg: 'bg-gradient-to-r from-amber-400/40 to-orange-400/30', border: 'border-amber-500/60', textColor: 'text-amber-800' },
+                { text: '💻 Data Enthusiast', bg: 'bg-gradient-to-r from-periwinkle/50 to-blue-400/40', border: 'border-periwinkle/70', textColor: 'text-blue-800' },
+                { text: '🎨 Art Lover', bg: 'bg-gradient-to-r from-pastel-pink/50 to-rose-400/40', border: 'border-pastel-pink/70', textColor: 'text-pink-800' },
+                { text: '❤️ Volunteer', bg: 'bg-gradient-to-r from-red-400/40 to-rose-500/30', border: 'border-red-500/60', textColor: 'text-red-800' }
+              ].map((tag, i) => (
+                <motion.span
                   key={i}
-                  className="px-3 py-1 bg-gradient-to-r from-pastel-pink/20 to-periwinkle/20 rounded-full text-sm border border-pastel-pink/30"
+                  className={`px-4 py-1.5 ${tag.bg} rounded-full text-sm font-semibold border-2 ${tag.border} ${tag.textColor} shadow-sm`}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {tag}
-                </span>
+                  {tag.text}
+                </motion.span>
               ))}
             </motion.div>
           </motion.div>
@@ -1074,7 +1081,7 @@ function App() {
               </div>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-2">
-              Anh Thư
+              Nguyen Do Anh Thu
             </h2>
             <p className="text-xl text-gray-400 font-mono">
               Aspiring Data Scientist | Social Innovator
@@ -1086,8 +1093,7 @@ function App() {
             className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto"
             variants={itemVariants}
           >
-            Kết nối dữ liệu với trái tim. Biến những con số thành câu chuyện có ý nghĩa.
-            Sẵn sàng để tạo ra tác động tích cực cho cộng đồng.
+            “What began as a quiet moment in front of a child’s drawing has grown into a lasting commitment to purposeful data use, and I see VinUniversity as the place where I can turn this commitment into meaningful impact.”
           </motion.p>
 
           {/* Download CV Button */}
@@ -1115,8 +1121,8 @@ function App() {
               {
                 icon: "📧",
                 label: "Email",
-                value: "anhthu@example.com",
-                href: "mailto:anhthu@example.com",
+                value: "nguyendoanhthu0804@gmail.com",
+                href: "mailto:nguyendoanhthu0804@gmail.com",
                 color: "from-red-400 to-pink-400"
               },
               {
@@ -1136,8 +1142,8 @@ function App() {
               {
                 icon: "📱",
                 label: "Phone",
-                value: "+84 xxx xxx xxx",
-                href: "tel:+84xxxxxxxxx",
+                value: "+84 978904146",
+                href: "tel:+84978904146",
                 color: "from-green-400 to-teal-400"
               }
             ].map((contact, i) => (
