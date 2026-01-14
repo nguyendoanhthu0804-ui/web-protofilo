@@ -114,7 +114,7 @@ const ImpactChart = () => {
 
             {/* Tab Navigation */}
             <div className="flex gap-2 mb-4">
-                {['Lĩnh vực', 'Số tiền'].map((tab, i) => (
+                {['Field', 'Amount'].map((tab, i) => (
                     <motion.button
                         key={tab}
                         onClick={() => setActiveChart(i)}
