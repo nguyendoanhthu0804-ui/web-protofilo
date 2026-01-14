@@ -1099,7 +1099,7 @@ function App() {
           {/* Download CV Button */}
           <motion.div className="mb-12" variants={scaleUp}>
             <motion.a
-              href="/cv-nguyen-hoang-bao.pdf"
+              href="/CV-Nguyen_Do_Anh_Thu.pdf"
               download
               className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-pastel-pink to-periwinkle text-charcoal font-bold text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
               whileHover={{ scale: 1.05, y: -2 }}
