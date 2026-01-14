@@ -565,7 +565,7 @@ function App() {
           {/* Left content */}
           <motion.div variants={slideFromLeft} className="bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none rounded-2xl p-4 md:p-0">
             <motion.h2
-              className="text-5xl font-bold mb-4 text-rose-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+              className="text-5xl font-bold mb-4 text-pinkish-purple drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
               variants={itemVariants}
             >
               Hello👋
@@ -574,19 +574,19 @@ function App() {
               className="text-4xl font-bold mb-6"
               variants={itemVariants}
             >
-              I am <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-rose-500 to-violet-600 font-extrabold" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>Anh Thu</span>
+              I am <span className="text-pinkish-purple font-extrabold">Anh Thu</span>
             </motion.h1>
             <motion.p
               className="text-lg leading-relaxed mb-4"
               variants={itemVariants}
             >
-              I am a <span className="font-semibold text-pastel-pink">Data Science</span> enthusiast who believes that data, when used thoughtfully, can create meaningful social impact.
+              I am a <span className="font-semibold text-pinkish-purple">Data Science</span> enthusiast who believes that data, when used thoughtfully, can create meaningful social impact.
             </motion.p>
             <motion.p
               className="text-lg leading-relaxed mb-4"
               variants={itemVariants}
             >
-              As someone who also loves <span className="font-semibold text-periwinkle">art</span>, I see <span className="font-semibold text-pastel-pink">data</span> not merely as numbers or code, but as a medium for storytelling – one that reveals the human realities behind patterns and statistics. Art shapes how I observe the world; data helps me understand and improve it.
+              As someone who also loves <span className="font-semibold text-pinkish-purple">art</span>, I see <span className="font-semibold text-pinkish-purple">data</span> not merely as numbers or code, but as a medium for storytelling – one that reveals the human realities behind patterns and statistics. Art shapes how I observe the world; data helps me understand and improve it.
             </motion.p>
             <motion.p
               className="text-lg leading-relaxed text-gray-600 italic"
@@ -1119,25 +1119,18 @@ function App() {
           >
             {[
               {
-                icon: "📧",
-                label: "Email",
-                value: "nguyendoanhthu0804@gmail.com",
-                href: "mailto:nguyendoanhthu0804@gmail.com",
-                color: "from-red-400 to-pink-400"
-              },
-              {
-                icon: "💼",
-                label: "LinkedIn",
-                value: "/in/anhthu",
-                href: "https://linkedin.com/in/anhthu",
-                color: "from-blue-400 to-blue-600"
-              },
-              {
                 icon: "🐙",
                 label: "GitHub",
                 value: "@anhthu",
                 href: "https://github.com/hoangbao",
                 color: "from-gray-400 to-gray-600"
+              },
+              {
+                icon: "📧",
+                label: "Email",
+                value: "nguyendoanhthu0804@gmail.com",
+                href: "mailto:nguyendoanhthu0804@gmail.com",
+                color: "from-red-400 to-pink-400"
               },
               {
                 icon: "📱",
