@@ -10,11 +10,21 @@ const ImageGallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const images = [
-    { src: "/images/photo1.jpg", caption: "Những khoảnh khắc đáng nhớ" },
-    { src: "/images/photo2.jpg", caption: "Hoạt động tình nguyện" },
-    { src: "/images/photo3.jpg", caption: "Dự án Entelier" },
-    { src: "/images/photo4.jpg", caption: "Cùng các em nhỏ" },
-    { src: "/images/photo5.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/anhthu2.png", caption: "Những khoảnh khắc đáng nhớ" },
+    { src: "/images/cjc1.jpg", caption: "Hoạt động tình nguyện" },
+    { src: "/images/cjc7.jpg", caption: "Dự án Entelier" },
+    { src: "/images/DSC_1241.jpeg", caption: "Cùng các em nhỏ" },
+    { src: "/images/ente1.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/ente2.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/ente3.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/ente4.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/ente5.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/IMG_5201.JPG", caption: "Hành trình của tôi" },
+    { src: "/images/sap1.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/sap2.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/sap3.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/sap4.jpg", caption: "Hành trình của tôi" },
+    { src: "/images/yosci1.jpg", caption: "Hành trình của tôi" },
   ];
 
   const nextImage = () => {
@@ -64,8 +74,19 @@ const ImageGallery = () => {
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="absolute inset-0 flex items-center justify-center"
             >
-              {/* Placeholder - replace with actual images */}
-              <div className="text-center p-4">
+              {/* Actual images */}
+              <img
+                src={images[currentIndex].src}
+                alt={images[currentIndex].caption}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback to placeholder if image doesn't exist
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              {/* Fallback placeholder */}
+              <div className="text-center p-4 hidden flex-col items-center justify-center absolute inset-0 bg-gradient-to-br from-warm-yellow/30 via-pastel-pink/20 to-periwinkle/30">
                 <span className="text-6xl mb-2 block">
                   {['🎨', '🤝', '💡', '❤️', '🌟'][currentIndex]}
                 </span>
@@ -524,7 +545,7 @@ function App() {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: 'url(/images/thu_page-0001.jpg)',
+            backgroundImage: 'url(/images/thu_page-0002.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
