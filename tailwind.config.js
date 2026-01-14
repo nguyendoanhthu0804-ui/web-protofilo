@@ -4,11 +4,12 @@ export default {
     theme: {
         extend: {
             colors: {
-                'pastel-pink': '#FFD1DC',    
-                'creamy-white': '#FDFBF7',   
-                'periwinkle': '#CCCCFF',     
-                'warm-yellow': '#FFEFD5',    
-                'charcoal': '#36454F',       
+                'pastel-pink': '#FFD1DC',
+                'creamy-white': '#FDFBF7',
+                'periwinkle': '#CCCCFF',
+                'warm-yellow': '#FFEFD5',
+                'charcoal': '#36454F',
+                'pinkish-purple': '#dd99dd',
             },
             fontFamily: {
                 'handwriting': ['Patrick Hand', 'cursive'],
