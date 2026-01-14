@@ -531,7 +531,6 @@ const scaleUp = {
     transition: { duration: 0.6, ease: "easeOut" }
   }
 };
-
 function App() {
   return (
     <div className="bg-creamy-white text-charcoal h-screen overflow-y-scroll md:snap-y md:snap-mandatory scroll-smooth no-scrollbar selection:bg-pastel-pink">
