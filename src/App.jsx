@@ -818,9 +818,9 @@ function App() {
                 Insight
               </p>
               <p className="text-lg text-creamy-white leading-relaxed">
-                <span className="text-periwinkle font-medium">Data Science</span> without Empathy is empty.
+                <span className="text-periwinkle font-medium">DATA SCIENCE</span> without <span className="text-pastel-pink font-medium">EMPATHY</span> is empty.
                 <br />
-                <span className="text-pastel-pink font-medium">Empathy</span> without Data is blind.
+                <span className="text-pastel-pink font-medium">EMPATHY</span> without <span className="text-periwinkle font-medium">DATA</span> is blind.
               </p>
             </motion.div>
           </motion.div>
