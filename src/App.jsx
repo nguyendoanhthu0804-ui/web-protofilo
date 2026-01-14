@@ -248,12 +248,12 @@ const MiniNav = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const sections = [
-    { id: 'intro', label: 'Giới thiệu', icon: '👋', color: '#f9a8d4' },
+    { id: 'intro', label: 'Introduction', icon: '👋', color: '#f9a8d4' },
     { id: 'connector', label: 'The Connector', icon: '🔗', color: '#a5b4fc' },
     { id: 'realization', label: 'The Realization', icon: '💡', color: '#fcd34d' },
     { id: 'gallery', label: "The 'Me'", icon: '🎨', color: '#f9a8d4' },
     { id: 'vinuni', label: 'Why VinUni?', icon: '🎓', color: '#60a5fa' },
-    { id: 'contact', label: 'Liên hệ', icon: '📧', color: '#a5b4fc' },
+    { id: 'contact', label: 'Contact', icon: '📧', color: '#a5b4fc' },
   ];
 
   // Track which section is in view
@@ -994,6 +994,19 @@ function App() {
               </p>
             </motion.div>
 
+            {/* Reason 3 */}
+            <motion.div
+              className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+              variants={slideFromRight}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <div className="text-4xl mb-4">💡</div>
+              <h3 className="text-xl font-bold mb-3 text-amber-300">Academic Excellence</h3>
+              <p className="text-gray-200 text-sm leading-relaxed">
+                VinUni offers a unique curriculum and teaching model adapted from top universities in the world. Moreover, with the appointment of Professor Tan Yap-Peng, who used to be Vice Dean of the College of Engineering (COE) at Nanyang Technological University (NTU), I believe that VinUni is a suitable environment for me to improve my academic ability.
+              </p>
+            </motion.div>
+
             {/* Reason 2 */}
             <motion.div
               className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
@@ -1007,18 +1020,6 @@ function App() {
               </p>
             </motion.div>
 
-            {/* Reason 3 */}
-            <motion.div
-              className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
-              variants={slideFromRight}
-              whileHover={{ y: -5, scale: 1.02 }}
-            >
-              <div className="text-4xl mb-4">💡</div>
-              <h3 className="text-xl font-bold mb-3 text-amber-300">Community-oriented Activities</h3>
-              <p className="text-gray-200 text-sm leading-relaxed">
-                Vingroup’s ecosystem offers a rare opportunity to transform data-driven ideas into tangible products that serve society.
-              </p>
-            </motion.div>
           </motion.div>
 
           {/* Quote Box */}
@@ -1060,7 +1061,7 @@ function App() {
           </motion.div>
         </motion.div>
 
-        <ScrollHint nextSection="Liên hệ" dark />
+        <ScrollHint nextSection="Contact" dark />
       </Section>
 
       {/* --- FOOTER: CONTACT & CTA --- */}
@@ -1120,8 +1121,8 @@ function App() {
               {
                 icon: "🐙",
                 label: "GitHub",
-                value: "@anhthu",
-                href: "https://github.com/hoangbao",
+                value: "@nguyendoanhthu0804-ui",
+                href: "https://github.com/nguyendoanhthu0804-ui",
                 color: "from-gray-400 to-gray-600"
               },
               {
@@ -1188,7 +1189,7 @@ function App() {
               >
                 <span className="text-2xl">↑</span>
               </motion.div>
-              <p className="text-xs font-medium">Về đầu trang</p>
+              <p className="text-xs font-medium">Back to top</p>
             </motion.button>
           </motion.div>
         </motion.div>
