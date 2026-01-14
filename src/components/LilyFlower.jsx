@@ -74,7 +74,7 @@ const DraggableItem = ({ item, onDragEnd, isCollected, isResetting, itemIndex })
 
     return (
         <motion.div
-            className={`absolute cursor-grab active:cursor-grabbing z-20 ${isCollected && !isResetting ? 'pointer-events-none' : ''}`}
+            className={`absolute cursor-grab active:cursor-grabbing z-[60] ${isCollected && !isResetting ? 'pointer-events-none' : ''}`}
             style={{
                 ...item.position,
             }}

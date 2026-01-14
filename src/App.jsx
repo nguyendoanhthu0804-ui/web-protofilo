@@ -246,6 +246,7 @@ const ScrollHint = ({ nextSection, dark = false }) => (
 const MiniNav = () => {
   const [activeSection, setActiveSection] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [isNavHovered, setIsNavHovered] = useState(false);
 
   const sections = [
     { id: 'intro', label: 'Introduction', icon: '👋', color: '#f9a8d4' },
@@ -300,9 +301,11 @@ const MiniNav = () => {
     <motion.nav
       className="fixed right-6 top-1/2 z-50 hidden md:flex flex-col items-center"
       initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.5, duration: 0.6 }}
+      animate={{ opacity: isNavHovered ? 1 : 0.2, x: 0 }}
+      transition={{ delay: 0.5, duration: 0.3 }}
       style={{ transform: 'translateY(-50%)' }}
+      onMouseEnter={() => setIsNavHovered(true)}
+      onMouseLeave={() => setIsNavHovered(false)}
     >
       {/* Navigation container with labels always visible */}
       <div className="relative flex flex-col items-end gap-2">
