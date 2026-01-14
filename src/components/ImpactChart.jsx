@@ -6,18 +6,18 @@ const ImpactChart = () => {
 
     // Data cho Pie Chart - Lĩnh vực tài trợ
     const pieData = [
-        { label: 'Giáo dục', value: 45, color: '#4A7DC4', startAngle: 0, hatchAngle: 45 },
-        { label: 'Khác', value: 25, color: '#E8944A', startAngle: 162, hatchAngle: -45 },
+        { label: 'Education', value: 45, color: '#4A7DC4', startAngle: 0, hatchAngle: 45 },
+        { label: 'Others', value: 25, color: '#E8944A', startAngle: 162, hatchAngle: -45 },
         { label: 'Teabreak', value: 10, color: '#7B8794', startAngle: 252, hatchAngle: 0 },
-        { label: 'Văn phòng phẩm', value: 8, color: '#5BC0DE', startAngle: 288, hatchAngle: 90 },
-        { label: 'Ngân hàng', value: 5, color: '#9B59B6', startAngle: 316.8, hatchAngle: 30 },
-        { label: 'Truyền thông', value: 7, color: '#27AE60', startAngle: 334.8, hatchAngle: -30 },
+        { label: 'Office Supplies', value: 8, color: '#5BC0DE', startAngle: 288, hatchAngle: 90 },
+        { label: 'Banking', value: 5, color: '#9B59B6', startAngle: 316.8, hatchAngle: 30 },
+        { label: 'Media', value: 7, color: '#27AE60', startAngle: 334.8, hatchAngle: -30 },
     ];
 
     // Data cho Bar Chart - Số tiền tài trợ
     const barData = [
-        { label: 'Giáo dục', value: 45500000, color: '#4A7DC4', displayValue: '45.5M' },
-        { label: 'Khác', value: 2100000, color: '#E8944A', displayValue: '2.1M' },
+        { label: 'Education', value: 45500000, color: '#4A7DC4', displayValue: '45.5M' },
+        { label: 'Others', value: 2100000, color: '#E8944A', displayValue: '2.1M' },
     ];
 
     const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
@@ -124,7 +124,7 @@ const ImpactChart = () => {
                             }`}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        style={{ fontFamily: "'Caveat', cursive", fontSize: '15px' }}
+                    // style={{ fontFamily: "'Caveat', cursive", fontSize: '15px' }}
                     >
                         {tab}
                     </motion.button>
@@ -143,9 +143,9 @@ const ImpactChart = () => {
                     >
                         <h3
                             className="text-charcoal font-bold mb-3 text-center"
-                            style={{ fontFamily: "'Caveat', cursive", fontSize: '20px' }}
+                        // style={{ fontFamily: "'Caveat', cursive", fontSize: '20px' }}
                         >
-                            📊 Lĩnh vực tài trợ
+                            📊 Funding
                         </h3>
 
                         <div className="flex flex-col md:flex-row items-center gap-5">
@@ -244,7 +244,7 @@ const ImpactChart = () => {
                                                 rx="2"
                                             />
                                         </svg>
-                                        <span style={{ fontFamily: "'Caveat', cursive", fontSize: '13px', color: '#444' }}>
+                                        <span style={{ fontSize: '13px', color: '#444' }}>
                                             {item.label} <span className="text-gray-400">({item.value}%)</span>
                                         </span>
                                     </motion.div>
@@ -264,9 +264,9 @@ const ImpactChart = () => {
                     >
                         <h3
                             className="text-charcoal font-bold mb-3 text-center"
-                            style={{ fontFamily: "'Caveat', cursive", fontSize: '20px' }}
+                            style={{ fontSize: '20px' }}
                         >
-                            💰 Số tiền tài trợ (VNĐ)
+                            💰 Funding Amount (VND)
                         </h3>
 
                         <div className="flex items-end justify-center gap-8 h-48 w-full px-4">
@@ -359,7 +359,7 @@ const ImpactChart = () => {
                                         {/* Label */}
                                         <span
                                             className="text-xs text-gray-600 text-center"
-                                            style={{ fontFamily: "'Caveat', cursive", fontSize: '14px' }}
+                                            style={{ fontSize: '14px' }}
                                         >
                                             {bar.label}
                                         </span>
@@ -377,9 +377,9 @@ const ImpactChart = () => {
                         >
                             <span
                                 className="text-gray-500"
-                                style={{ fontFamily: "'Caveat', cursive", fontSize: '15px' }}
+                                style={{ fontSize: '15px' }}
                             >
-                                Tổng: <span className="font-bold text-periwinkle">47.6M VNĐ</span>
+                                Total: <span className="font-bold text-periwinkle">47.6M VND</span>
                             </span>
                         </motion.div>
                     </motion.div>
@@ -389,7 +389,7 @@ const ImpactChart = () => {
             <p
                 className="mt-3 text-xs text-charcoal italic text-center max-w-[280px]"
             >
-                "Phân tích dữ liệu tài trợ giúp Entelier kết nối hiệu quả hơn với nhà tài trợ."
+                "Data analysis helps Entelier connect more effectively with sponsors."
             </p>
         </div>
     );

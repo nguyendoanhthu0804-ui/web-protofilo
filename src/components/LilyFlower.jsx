@@ -752,7 +752,7 @@ const LilyFlower = () => {
                     ))}
                 </div>
                 <p className="text-sm text-gray-500 font-medium">
-                    {collectedItems.length}/{draggableItems.length} đã tưới
+                    {collectedItems.length}/{draggableItems.length} watered
                 </p>
             </div>
 
@@ -789,12 +789,12 @@ const LilyFlower = () => {
             {/* Hướng dẫn */}
             {collectedItems.length === 0 && (
                 <motion.p
-                    className="absolute top-4 left-1/2 -translate-x-1/2 text-center text-gray-500 text-sm max-w-[250px]"
+                    className="absolute -top-6 left-1/2 -translate-x-1/2 text-center text-gray-500 text-sm max-w-[250px]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1 }}
                 >
-                    ✨ Kéo các biểu tượng xung quanh vào bông hoa để "tưới nước" ✨
+                    ✨ Drag these icons around the flower to "water" it ✨
                 </motion.p>
             )}
         </div>
