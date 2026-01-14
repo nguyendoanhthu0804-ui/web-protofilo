@@ -389,7 +389,7 @@ const ImpactChart = () => {
             <p
                 className="mt-3 text-xs text-charcoal italic text-center max-w-[280px]"
             >
-                "Data analysis helps Entelier connect more effectively with sponsors."
+                "Data analysis helps my projects connect more effectively with sponsors."
             </p>
         </div>
     );
