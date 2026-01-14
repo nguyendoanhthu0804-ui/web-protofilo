@@ -14,6 +14,7 @@ export default {
             fontFamily: {
                 'handwriting': ['Patrick Hand', 'cursive'],
                 'mono': ['Fira Code', 'monospace'],
+                'poppins': ['Poppins', 'sans-serif'],
             }
         },
     },
